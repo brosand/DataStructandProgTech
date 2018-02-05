@@ -20,6 +20,9 @@ int main(  ) {
                 if (upper && ctr == 1) {
                     putchar(toupper(c));
                     }
+                else if (ctr == 1) {
+                    putchar(tolower(c));
+                }
                 else {
                     putchar(c);
                 }
@@ -27,16 +30,20 @@ int main(  ) {
             
             c = getchar();
         }
-        if (ctr > 3) {
+        if (ctr == 1) {
+            putchar(first);
+        }
+        else {
             putchar(tolower(first));
+        }
+        if (ctr > 3) {
             putchar('o');
         }
         else {
-            putchar(first);
             putchar('a');
             putchar('n');
         }
-        if (!isalpha(c)) {
+        if (!isalpha(c) &&  (c != EOF)) {
                 putchar(c);
             }
         first = getchar();
