@@ -1,0 +1,65 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+
+inputDir = '/c/cs223/Hwk2/testFiles'
+
+if not os.path.exists(inputDir):
+    inputDir = 'testFiles' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-02-15 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copy('transpose.c')
+except:
+    t.testFail(100, "transpose.c does not exist")
+    print(t.report())
+    sys.exit(0)
+
+t.copyDirFollowLinks(inputDir)
+
+t.log("# test sample inputs and outputs")
+
+# 10 pts if transpose.c exists
+t.testOK(10, "transpose.c exists")
+
+# 10 pts if transpose.c compiles with all flags
+t.test(10, "gcc -std=c99 -g3 -Wall -pedantic -o transpose transpose.c", tester.Match(b''), 20)
+
+# 10 pts if transpose.c compiles at all
+if t.test(10, "gcc -std=c99 -g3 -o transpose transpose.c || echo compile failed", 
+          lambda s: s.find(b'compile failed') < 0, 20) == 0:
+    # can't compile
+    t.testFail(70, 'Compile failed, skipping remaining tests')
+else:
+    # sample inputs and outputs
+    # 10 points for each test
+    t.log('# match sample inputs with sample outputs')
+    inputs = glob.glob(os.path.join(inputDir, '*.in'))
+    inputs.sort()
+    for input in inputs:
+        output = input.replace('.in', '.out')
+        args = input.split('.')[-4:-1]
+        t.copy(input)
+        t.test(10, './transpose {} {} {} < {}'.format(args[0], args[1], args[2], os.path.basename(input)), 
+               tester.Match(open(output, "rb").read()))
+
+    t.log('# check handling of bad arguments')
+
+    # check bogus n
+    t.test(5, './transpose -5 3 2 < /dev/null > /dev/null 2> /dev/null || echo -n error', tester.Match(b'error'))
+
+    # check bogus args
+    t.test(5, './transpose 5 3 2 1 < /dev/null > /dev/null 2> /dev/null || echo -n error', tester.Match(b'error'))
+
+    # valgrind
+    t.log("# valgrind test on hello.5.3.2.in")
+    t.test(10, "exec valgrind -q --partial-loads-ok=yes --leak-check=yes ./transpose 5 3 2 < hello.5.3.2.in > /dev/null",
+            tester.Match(b''),
+            30)
+
+print(t.report())
