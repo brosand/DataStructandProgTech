@@ -1,15 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <inttypes.h>
 
 int main(int argc, char *argv[]){
     /* puts("6"); */
-    int n = *argv[0];
-    int a = *argv[1];
-    int b = *argv[2];
+    if (argc != 4 || strtol(argv[1], NULL, 10) < 1){
+            /* return 1; */
+        return 1;
+    }
+    
+    long n = strtol(argv[1], NULL, 10);
+    long a = strtol(argv[2], NULL, 10);
+    long b = strtol(argv[3], NULL, 10);
     
     int first = getchar();
-    while (first != EOF) {
+    int ctr = 0;
+    
+     while (first != EOF) {
         int in[n]; 
         for(int i = 0; i < n; i++) {
             if (first == EOF) {
@@ -18,21 +26,16 @@ int main(int argc, char *argv[]){
             else {
                 in[i] = first;
             }
-           // out[i] = in[a*i*v]
             first = getchar();
             
         }
-        for(int i = 0; i < n; i++) {
-            /* puts("27"); */
-            int q = (a * i + b);
-            printf("%d", q);
-            puts("30");
-            /* printf("%d", (a * i + b)); */
-            printf("%d", (in[q]));
-            puts("32");
-            putchar(in[(a * i + b)]);
+        for(int k = 0; k < n; k++) {
+            
+            long q = (((ctr * a + b) % n + n) % n);
+            putchar(in[q]);
+            ctr++;
         }
-    }
+     }
     
 }
 
