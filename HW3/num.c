@@ -19,8 +19,7 @@ struct num {
  * Leading zeros are OK: numCreate("012") parses as 12.
  * Empty string parses as 0 */
  struct num * numCreate(const char *s){
-   struct num *s2;
-   
+   struct num *s2; 
    s2 = malloc(sizeof(struct num));
    s2->length = strlen(s);
    s2->data = malloc(sizeof(int) * s2->length);
