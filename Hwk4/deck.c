@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "deck.h"
 // Standard suits and ranks
@@ -25,9 +26,9 @@ struct elt {
 };
 
 struct deck {
-    /* int length; */
     struct elt *head;
     struct elt *tail;
+    
 };
 // Create a new unshuffled deck of 52 cards,
 // ordered by suit then rank:
@@ -35,22 +36,20 @@ struct deck {
 // AC 2C 3C ... KC AD 2D 3D ... KD AH 2H 3H ... KS w
 struct deck *deckCreate(void) {
     struct deck *d2;
-    /* struct card c1; */
     
     int numSuits = strlen(SUITS);
     int numRanks = strlen(RANKS);
     
     d2 = malloc(sizeof(struct deck));
     d2->head = d2->tail = 0;
-    /* d2->length = 0;    */
-    for (int s = 1; s < numSuits; s++) {
-        for (int r = 1; r < numRanks; r++) {
+    
+    for (int s = 0; s < numSuits; s++) {
+        for (int r = 0; r < numRanks; r++) {
            Card cTemp; 
-           /* cTemp = malloc(sizeof(struct card)); */
+           
            cTemp.suit = SUITS[s];
            cTemp.rank = RANKS[r];
            deckPutCard(d2, cTemp);   
-           /* d2->length++; */
         }
     }
     return d2;
@@ -60,20 +59,19 @@ struct deck *deckCreate(void) {
 // Running time should be O(length of deck)
 void deckDestroy(Deck *d) {
     while (deckNotEmpty(d)) {
-        deckGetCard;
+        deckGetCard(d);
     }
     free(d);
 }
-
-    
-    /* free(d->cards); */
-    /* free(d); */
 
 
 // Return true if deck is not empty.
 // Running time should be O(1).
 int deckNotEmpty(const Deck *d) {
-    return (d->head == 0);
+    /* printf("%d\n", d->length); */
+    /* return (!(d->length == 0)); */
+    return (d->head != 0);
+    /* if d- */
 }
 // Remove and return the top card of a deck.
 // If deck is empty, behavior is undefined.
@@ -81,15 +79,15 @@ int deckNotEmpty(const Deck *d) {
 Card deckGetCard(Deck *d) {
     Card out;
     struct elt *cd;
-    out = (d->head)->card;
+    
+    out = d->head->card;
     cd = d->head;
-    /* printf("%c\n", cd->card.rank); */
     d->head = cd->next;
    
-    /* free(cd->card); */
     free(cd);
     return out;
 }
+
 
 // Add a card to the bottom of a deck.
 // This is not required to do anything special if the card is bogus
@@ -108,7 +106,6 @@ void deckPutCard(Deck *d, Card c){
         d->tail->next = cd;
     }
     d->tail = cd;
-       
     
 }
 
@@ -120,7 +117,24 @@ void deckPutCard(Deck *d, Card c){
 // Destroys d.
 // Running time should be O(n).
 void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
-    
+    /* puts("120"); */
+    Deck *d1_;
+    Deck *d2_;
+    d1_ = malloc(sizeof(Deck));
+    d2_ = malloc(sizeof(Deck));
+    d1_->head = d2_->head = d1_->tail = d2_->tail = 0;
+    for (int i = 0; i < n; i++) {
+       if (deckNotEmpty(d)) {
+           deckPutCard(d1_, deckGetCard(d));
+       }
+       else {
+           break;
+       }
+   } 
+    d2_ = d;
+    d = 0;
+    *d1 = d1_;
+    *d2 = d2_;
 }
 
 // Shuffle two decks together by alternating cards from
@@ -139,27 +153,21 @@ void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
 Deck *deckShuffle(Deck *d1, Deck *d2) {
     Card e1;
     Card e2;
-
-    struct deck *d;
-    d = malloc(sizeof(struct deck));
+    
+    Deck *d;
+    d = malloc(sizeof(Deck));
     d->head = d->tail = 0;
-    /* e1 = malloc(sizeof(struct elt)); */
-    /* e2 = malloc(sizeof(struct elt)); */
-    /* e1 = deckGetCard(d1); */
-    /* e2 = deckGetCard(d2); */
-
+    /* puts("157"); */
     while (deckNotEmpty(d1)) {
-        if (deckNotEmpty(d2)) {
-            deckPutCard(d, e1);
-            deckPutCard(d, e2);
-            e2 = deckGetCard(d2);
-        }
-        else {
-            deckPutCard(d1, e1);
-        }
         e1 = deckGetCard(d1);
+            deckPutCard(d, e1);
+        if (deckNotEmpty(d2)) {
+            e2 = deckGetCard(d2);
+            deckPutCard(d, e2);
+        }
     }
     while (deckNotEmpty(d2)) {
+        e2 = deckGetCard(d2);
         deckPutCard(d, e2);
     }
     deckDestroy(d1);
@@ -176,12 +184,9 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
 void deckPrint(const Deck *d, FILE *f) {
     struct elt *e;
     e = d->head;
-    Card cd;
-    
-    while(e != 0) {
-        cd = e->card;
+    while(e != 0) { 
+        Card cd = e->card;
         fprintf(f, "%c%c", cd.rank, cd.suit);
-        
         e = e->next;
         if (e != 0) {
             fputc(' ', f);
