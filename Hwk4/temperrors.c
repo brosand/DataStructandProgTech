@@ -213,7 +213,7 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             d->tail = temp1;
             /* d->tail = d1->tail; */
             free(d1);
-            deckDestroy(d2);
+            /* deckDestroy(d2); */
             /* free(temp); */
             /* free(temp1); */
         }
@@ -230,6 +230,8 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             /* puts("hi"); */
             /* temp = d->tail->next; */
             temp = d2->head;
+            /* temp = d2; */
+            /* d->tail->next = temp->head; */
             d->tail->next = temp;
             /* d->tail->next = d2->head; */
             /* free(temp); */
@@ -238,7 +240,7 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             /* d->tail = d2->tail; */
             /* free(temp); */
             free(d2);
-            deckDestroy(d1);
+            /* deckDestroy(d1); */
         }
         /* deckDestroy(d1); */
     }
@@ -247,7 +249,18 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
     /*     deckDestroy(d2); */
         
     /* } */
-    
+    /* if (!(deckNotEmpty(d1))) { */
+        /* puts("251"); */
+        /* deckPrint(d1, stdout); */
+        /* free(d1); */
+        /* puts("254"); */
+    /* } */
+    /* if (!(deckNotEmpty(d2))) { */
+        /* puts("256"); */
+        /* deckPrint(d2,stdout); */
+        /* free(d2); */
+        /* puts("260"); */
+    /* } */
     /* if(!(deckNotEmpty(d1))) {deckDestroy(d1);} */
     /* if(!(deckNotEmpty(d2))) {deckDestroy(d2);} */
    /* d1 = 0; */
@@ -257,8 +270,8 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
     /* printf("doutlen: %d\n", d->length); */
     /* d1 = 0; */
     /* d2 = 0; */
-    /* free(d1); */
-    /* free(d2); */
+    free(d1);
+    free(d2);
     /* free(temp1); */
     /* free(temp); */
     return d;

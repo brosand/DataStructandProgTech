@@ -1,0 +1,14 @@
+# create a new deck and print it
+c1 p1
+# remove top card from the deck
+-1 p1
+# put it back on the bottom
++1 AC p1
+# split into two decks
+/ 1 2 17 p1 p2
+# shuffle them back together
+* 1 2 p1
+# split into a nonempty deck and an empty deck
+#/ 1 2 100000 e1 p1 e2 p2
+# clean up and exit
+d1 q

@@ -1,0 +1,388 @@
+Reading data from 'callgrind.out.5479'...
+--------------------------------------------------------------------------------
+Profile data file 'callgrind.out.5479' (creator: callgrind-3.11.0)
+--------------------------------------------------------------------------------
+I1 cache: 
+D1 cache: 
+LL cache: 
+Timerange: Basic block 0 - 4423291575
+Trigger: Program termination
+Profiled target:  ./testDeck (PID 5479, part 1)
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Thresholds:       99
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+            Ir 
+--------------------------------------------------------------------------------
+18,823,928,873  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+            Ir  file:function
+--------------------------------------------------------------------------------
+18,823,928,873  ???:0x0000000000000c30 [/lib/x86_64-linux-gnu/ld-2.23.so]
+18,823,836,614  ???:_start [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck]
+18,823,836,598  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx [/lib/x86_64-linux-gnu/ld-2.23.so]
+18,823,835,612  /build/glibc-Cl5G7W/glibc-2.23/csu/../csu/libc-start.c:(below main) [/lib/x86_64-linux-gnu/libc-2.23.so]
+18,823,835,410  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck.c:main
+18,823,457,285  testDeck.c:main [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck]
+18,763,422,910  deck.c:deckShuffle [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck]
+18,763,422,910  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckShuffle
+ 9,642,355,567  deck.c:deckPutCard [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck]
+ 8,154,370,775  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc [/lib/x86_64-linux-gnu/libc-2.23.so]
+ 7,835,933,400  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:free [/lib/x86_64-linux-gnu/libc-2.23.so]
+ 5,798,590,716  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:_int_free [/lib/x86_64-linux-gnu/libc-2.23.so]
+ 4,549,737,402  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:_int_malloc [/lib/x86_64-linux-gnu/libc-2.23.so]
+    33,172,864  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckPrint
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: deck.c
+--------------------------------------------------------------------------------
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@ Source file 'deck.c' is more recent than input file 'callgrind.out.5479'.
+@ Annotations may not be correct.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+         Ir 
+
+-- line 29 ----------------------------------------
+          .      struct elt *head;
+          .      struct elt *tail;
+          .      
+          .  };
+          .  // Create a new unshuffled deck of 52 cards,
+          .  // ordered by suit then rank:
+          .  //
+          .  // AC 2C 3C ... KC AD 2D 3D ... KD AH 2H 3H ... KS w
+      6,012  struct deck *deckCreate(void) {
+          .      struct deck *d2;
+          .      
+          .      int numSuits = strlen(SUITS);
+          .      int numRanks = strlen(RANKS);
+          .      
+      4,012      d2 = malloc(sizeof(struct deck));
+    104,195  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (1001x)
+      1,068  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+     14,028      d2->head = d2->tail = 0;
+          .      
+      8,016      for (int s = 0; s < numSuits; s++) {
+    108,216          for (int r = 0; r < numRanks; r++) {
+          .             Card cTemp; 
+          .             
+    260,520             cTemp.suit = SUITS[s];
+     52,104             cTemp.rank = RANKS[r];
+    156,312             deckPutCard(d2, cTemp);   
+ 11,061,895  => deck.c:deckPutCard (52104x)
+          .          }
+          .      }
+          .      return d2;
+      7,014  }
+          .  
+          .  // Free all space used by d.
+          .  // Running time should be O(length of deck)
+      8,010  void deckDestroy(Deck *d) {
+    112,219      while (deckNotEmpty(d)) {
+          .          deckGetCard(d);
+          .      }
+     12,015      free(d);
+    400,500  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:free (4005x)
+      4,005  }
+          .  
+          .  
+          .  // Return true if deck is not empty.
+          .  // Running time should be O(1).
+          .  int deckNotEmpty(const Deck *d) {
+          .      /* printf("%d\n", d->length); */
+          .      /* return (!(d->length == 0)); */
+104,389,338      return (d->head != 0);
+          .      /* if d- */
+          .  }
+          .  // Remove and return the top card of a deck.
+          .  // If deck is empty, behavior is undefined.
+          .  // Running time should be O(1).
+          .  Card deckGetCard(Deck *d) {
+          .      Card out;
+          .      struct elt *cd;
+          .      
+156,606,450      out = d->head->card;
+          .      cd = d->head;
+235,013,883      d->head = cd->next;
+          .     
+235,099,973      free(cd);
+  1,701,700  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:free (17017x)
+          .      return out;
+          .  }
+          .  
+          .  
+          .  // Add a card to the bottom of a deck.
+          .  // This is not required to do anything special if the card is bogus
+          .  //   (e.g. "1C", "?X", "A-").
+          .  // Running time should be O(1).
+391,776,645  void deckPutCard(Deck *d, Card c){
+          .      struct elt *cd;
+235,065,987      cd = malloc(sizeof(struct elt));
+8,153,608,321  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (78355329x)
+          .      
+ 78,355,329      cd->card = c;
+ 78,355,329      cd->next = 0;
+156,710,658      if (d->head == 0) {
+      4,005          d->head = cd;
+          .      }
+          .      else {
+156,702,648          d->tail->next = cd;
+          .      }
+ 78,355,329      d->tail = cd;
+          .      
+313,421,316  }
+          .  
+          .  // Split a deck into two piles:
+          .  //    *d1 is new deck with top n cards in d.
+          .  //    *d2 is new deck with remaining cards in d.
+          .  // Order of cards is preserved.
+          .  // If d contains fewer than n cards, put them all in d1.
+          .  // Destroys d.
+          .  // Running time should be O(n).
+     12,012  void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
+          .      Deck *d1_;
+          .      Deck *d2_;
+          .      d1_ = malloc(sizeof(Deck));
+      4,004      d2_ = malloc(sizeof(Deck));
+    104,104  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (1001x)
+      3,003      d1_->head = d1_->tail = 0;
+    104,104  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (1001x)
+      4,004      for (int i = 0; i < n; i++) {
+     53,053         if (deckNotEmpty(d)) {
+     35,035             deckPutCard(d1_, deckGetCard(d));
+     85,085         }
+  2,092,090  => deck.c:deckPutCard (17017x)
+          .         else {
+          .             break;
+          .         }
+          .     } 
+          .      d2_ = d;
+          .      d = 0;
+          .      *d1 = d1_;
+      2,002      *d2 = d2_;
+      2,002  }
+      8,008  
+          .  // Shuffle two decks together by alternating cards from
+          .  // d1 and d2 to obtain new deck.
+          .  //
+          .  // If d1 is X X X X 
+          .  // and d2 is Y Y Y Y Y Y Y,
+          .  // return value is X Y X Y X Y X Y Y Y Y.
+          .  //
+          .  // If d1 is X X X X
+          .  // and d2 is Y Y,
+          .  // return value is X Y X Y X X.
+          .  //
+          .  // Running time should be O(length of shorter deck).
+          .  // Destroys d1 and d2.
+          .  Deck *deckShuffle(Deck *d1, Deck *d2) {
+     18,018      Card e1;
+          .      Card e2;
+          .      
+          .      Deck *d;
+          .      d = malloc(sizeof(Deck));
+      8,008      d->head = d->tail = 0;
+    390,721  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (2002x)
+      4,004      /* puts("157"); */
+          .      while (deckNotEmpty(d1)) {
+ 52,198,146          e1 = deckGetCard(d1);
+          .              deckPutCard(d, e1);
+104,380,276          if (deckNotEmpty(d2)) {
+3,209,691,485  => deck.c:deckPutCard (26095069x)
+ 52,190,138              e2 = deckGetCard(d2);
+          .              deckPutCard(d, e2);
+    414,414          }
+  8,495,487  => deck.c:deckPutCard (69069x)
+          .      }
+          .      while (deckNotEmpty(d2)) {
+104,248,144          e2 = deckGetCard(d2);
+          .          deckPutCard(d, e2);
+260,610,350      }
+6,411,014,610  => deck.c:deckPutCard (52122070x)
+          .      deckDestroy(d1);
+      4,004      deckDestroy(d2);
+    218,218  => deck.c:deckDestroy (2002x)
+      4,004      
+    218,218  => deck.c:deckDestroy (2002x)
+          .      return d;
+          .          
+          .  }
+     18,018  
+          .  // Print the contents of deck to f as sequence of ranks/suits
+          .  // separated by spaces.
+          .  // Example output: "AS TC 9D 3H 5S" (without quotes)
+          .  // Running time should be O(length of deck).
+          .  void deckPrint(const Deck *d, FILE *f) {
+          3      struct elt *e;
+          .      e = d->head;
+          1      while(e != 0) { 
+          4          Card cd = e->card;
+          .          fprintf(f, "%c%c", cd.rank, cd.suit);
+          .          e = e->next;
+     52,104          if (e != 0) {
+    104,208              fputc(' ', f);
+    260,519          }
+        959  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+  4,074,870  => /build/glibc-Cl5G7W/glibc-2.23/libio/fputc.c:fputc (52102x)
+          .      }
+          .  }
+          4  <bogus line 195>
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@ WARNING @@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@
+@@ Information recorded about lines past the end of 'deck.c'.
+@@
+@@ Probable cause and solution:
+@@ cause:    'deck.c' has changed since information was gathered.
+@@           If so, a warning will have already been issued about this.
+@@ solution: Recompile program and rerun under "valgrind --cachesim=yes" to 
+@@           gather new information.
+@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: testDeck.c
+--------------------------------------------------------------------------------
+    Ir 
+
+-- line 25 ----------------------------------------
+     .  // # comment - ignore all text to end of line
+     .  
+     .  #define N (1024)  // number of deck registers
+     .  
+     .  #define Error(x) (fprintf(stderr, "%s: " x "\n", argv[0]), exit(1))
+     .  
+     .  int
+     .  main(int argc, char **argv)
+     8  {
+     3      if(argc != 1) {
+     .          fprintf(stderr, "Usage: %s\n", argv[0]);
+     .          return 1;
+     .      }
+     .  
+     .      Deck *d[N];
+     .      char command;
+     .      int d1;
+     .      int d2;
+     .      int n;
+     .      Card c;
+     .  
+24,054      while((command = getchar()) != EOF) {
+32,076          switch(command) {
+     .              case 'c':
+ 7,018                  if(scanf("%d", &d1) != 1) { Error("c: bad deck"); }
+ 1,571  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+598,043  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1001x)
+ 3,006                  d[d1] = deckCreate();
+11,783,392  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckCreate (1002x)
+ 1,002                  break;
+     .  
+     .              case 'd':
+     7                  if(scanf("%d", &d1) != 1) { Error("d: bad deck"); }
+   597  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1x)
+     3                  deckDestroy(d[d1]);
+5,575,238  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckDestroy (1x)
+     1                  break;
+     .  
+     .              case 'e':
+     .                  if(scanf("%d", &d1) != 1) { Error("e: bad deck"); }
+     .                  printf("%d\n", deckNotEmpty(d[d1]) != 0);
+     .                  break;
+     .  
+     .              case '-':
+     .                  if(scanf("%d", &d1) != 1) { Error("-: bad deck"); }
+     .                  c = deckGetCard(d[d1]);
+     .                  printf("%c%c\n", c.rank, c.suit);
+     .                  break;
+     .  
+     .              case '+':
+     .                  if(scanf("%d", &d1) != 1) { Error("+: bad deck"); }
+     1                  if(scanf(" %c%c", &c.rank, &c.suit) != 2) { Error("+: bad card"); }
+     .                  deckPutCard(d[d1], c);
+     .                  break;
+     .  
+     .              case '/':
+ 7,007                  if(scanf("%d", &d1) != 1) { Error("/: bad deck"); }
+613,278  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1001x)
+ 7,007                  if(scanf("%d", &d2) != 1) { Error("/: bad deck"); }
+613,058  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1001x)
+ 7,007                  if(scanf("%d", &n) != 1) { Error("/: bad n"); }
+665,336  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1001x)
+ 7,007                  deckSplit(d[d1], n, &d[d1], &d[d2]);
+4,380,376  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckSplit (1001x)
+ 1,001                  break;
+     .  
+     .              case '*':
+14,014                  if(scanf("%d", &d1) != 1) { Error("*: bad deck"); }
+1,226,556  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (2002x)
+14,014                  if(scanf("%d", &d2) != 1) { Error("*: bad deck"); }
+1,226,006  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (2002x)
+12,012                  d[d1] = deckShuffle(d[d1], d[d2]);
+18,763,422,910  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckShuffle (2002x)
+ 2,002                  break;
+     .  
+     .              case 'p':
+     7                  if(scanf("%d", &d1) != 1) { Error("p: bad deck"); }
+   597  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/isoc99_scanf.c:__isoc99_scanf (1x)
+     4                  deckPrint(d[d1], stdout);
+33,172,864  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c:deckPrint (1x)
+     .                  putchar('\n');
+     .                  break;
+     .  
+     .              case 'q':
+     7                  exit(0);
+ 1,909  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+     .                  break;
+     .  
+     .              case '#':
+     .                  // eat rest of line
+   345                  while(((command = getchar()) != EOF) && (command != '\n'));
+     .                  break;
+     .  
+     .              default:
+24,046                  if(!isspace(command)) {
+12,018  => /build/glibc-Cl5G7W/glibc-2.23/ctype/../include/ctype.h:__ctype_b_loc (4006x)
+   877  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+     .                      fprintf(stderr, "%s: bad command %c\n", argv[0], command);
+     .                      exit(1);
+     .                  }
+     .                  // else ignore it
+     .                  break;
+     .          }
+     .      }
+     .          
+-- line 112 ----------------------------------------
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck.c
+--------------------------------------------------------------------------------
+  No information has been collected for /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/testDeck.c
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c
+--------------------------------------------------------------------------------
+  No information has been collected for /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester 2/CS223/Hwk4/deck.c
+
+--------------------------------------------------------------------------------
+The following files chosen for auto-annotation could not be found:
+--------------------------------------------------------------------------------
+  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c
+  /build/glibc-Cl5G7W/glibc-2.23/csu/../csu/libc-start.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h
+
+--------------------------------------------------------------------------------
+Ir 
+--------------------------------------------------------------------------------
+15  percentage of events annotated
+

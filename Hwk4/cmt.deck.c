@@ -161,9 +161,7 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
     Card e2;
     /* printf("card size: %lu\n", sizeof(struct elt)); */
     /* printf("Deck size: %lu\n", sizeof(struct deck)); */
-    /* Deck *temp; */
-    struct elt *temp;
-    struct elt *temp1;
+    /* struct elt *temp; */
     
     Deck *d;
     d = malloc(sizeof(Deck));
@@ -198,24 +196,13 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             d = d1;
         }
         else {
-            
-            //now there is a d1 which points to head and tail, taking up space?
-            //and a d pointing which takes up space, no need to define the head and tail
             /* puts("hi1"); */
-            /* temp = d1; */
-            temp = d1->head;
-            d->tail->next = temp;
+            /* temp = d->tail->next; */
+            d->tail->next = d1->head;
             /* free(temp); */
-            temp1 = d1->tail;
-            /* d->tail->next = d1->head; */
+            /* temp = d->tail; */
+            d->tail = d1->tail;
             /* free(temp); */
-            /* temp = d1->tail; */
-            d->tail = temp1;
-            /* d->tail = d1->tail; */
-            free(d1);
-            deckDestroy(d2);
-            /* free(temp); */
-            /* free(temp1); */
         }
         /* deckDestroy(d2); */
     }
@@ -229,16 +216,11 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
         else {
             /* puts("hi"); */
             /* temp = d->tail->next; */
-            temp = d2->head;
-            d->tail->next = temp;
-            /* d->tail->next = d2->head; */
+            d->tail->next = d2->head;
             /* free(temp); */
-            temp1 = d2->tail;
-            d->tail = temp1;
-            /* d->tail = d2->tail; */
+            /* temp = d->tail; */
+            d->tail = d2->tail;
             /* free(temp); */
-            free(d2);
-            deckDestroy(d1);
         }
         /* deckDestroy(d1); */
     }
@@ -248,8 +230,8 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
         
     /* } */
     
-    /* if(!(deckNotEmpty(d1))) {deckDestroy(d1);} */
-    /* if(!(deckNotEmpty(d2))) {deckDestroy(d2);} */
+    if(!(deckNotEmpty(d1))) {deckDestroy(d1);}
+    if(!(deckNotEmpty(d2))) {deckDestroy(d2);}
    /* d1 = 0; */
    /* d2 = 0; */
     /* deckDestroy(d1); */
@@ -259,8 +241,6 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
     /* d2 = 0; */
     /* free(d1); */
     /* free(d2); */
-    /* free(temp1); */
-    /* free(temp); */
     return d;
         
 }

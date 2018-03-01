@@ -43,7 +43,6 @@ struct deck *deckCreate(void) {
 
     d2 = malloc(sizeof(Deck));
     d2->head = d2->tail = 0;
-    /* d2->length = 52; */
     
     for (int s = 0; s < numSuits; s++) {
         for (int r = 0; r < numRanks; r++) {
@@ -87,7 +86,6 @@ Card deckGetCard(Deck *d) {
     d->head = cd->next;
    
     free(cd);
-    /* d->length--; */
     return out;
 }
 
@@ -123,9 +121,7 @@ void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
     Deck *d1_;
     Deck *d2_;
     d1_ = malloc(sizeof(Deck));
-    /* d2_ = malloc(sizeof(Deck)); */
     d1_->head = d1_->tail = 0;
-    /* d1_->length = 0; */
     for (int i = 0; i < n; i++) {
        if (deckNotEmpty(d)) {
            deckPutCard(d1_, deckGetCard(d));
@@ -135,9 +131,6 @@ void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
        }
    } 
     d2_ = d;
-   /* d2_->head = d->head;  */
-   /* d2_->tail = d->tail; */
-    /* d = 0; */
     *d1 = d1_;
     *d2 = d2_;
 }
@@ -156,111 +149,45 @@ void deckSplit(Deck *d, int n, Deck **d1, Deck **d2) {
 // Running time should be O(length of shorter deck).
 // Destroys d1 and d2.
 Deck *deckShuffle(Deck *d1, Deck *d2) {
-    /* printf("d1len, d2len: %d, %d\n", d1->length, d2->length); */
     Card e1;
     Card e2;
-    /* printf("card size: %lu\n", sizeof(struct elt)); */
-    /* printf("Deck size: %lu\n", sizeof(struct deck)); */
-    /* Deck *temp; */
-    struct elt *temp;
-    struct elt *temp1;
+  
     
     Deck *d;
     d = malloc(sizeof(Deck));
-    /* if (!(deckNotEmpty(d1))) { */
-        /* d = d2; */
-        /* return d; */
-    /* } */
-    /* else if (!(deckNotEmpty(d2))) { */
-            /* d = d1; */
-            /* return d; */
-        /* } */
+   
     d->head = d->tail = 0;
-    /* d->length = 0; */
-    /* puts("157"); */
+  
     while (deckNotEmpty(d1) && deckNotEmpty(d2)) {
         e1 = deckGetCard(d1);
-            deckPutCard(d, e1);
-        /* if (deckNotEmpty(d2)) { */
-            e2 = deckGetCard(d2);
-            deckPutCard(d, e2);
-        /* } */
+        deckPutCard(d, e1);
+        e2 = deckGetCard(d2);
+        deckPutCard(d, e2);
+      
     }
-    /* while (deckNotEmpty(d2)) { */
-        /* e2 = deckGetCard(d2); */
-        /* deckPutCard(d, e2); */
-    /* } */
     if (deckNotEmpty(d1)) {
         if (!(deckNotEmpty(d))) {
-            /* d->head = d1->head; */
-            /* d->tail = d1->tail; */
-            /* deckDestroy(d); */
             d = d1;
         }
         else {
-            
-            //now there is a d1 which points to head and tail, taking up space?
-            //and a d pointing which takes up space, no need to define the head and tail
-            /* puts("hi1"); */
-            /* temp = d1; */
-            temp = d1->head;
-            d->tail->next = temp;
-            /* free(temp); */
-            temp1 = d1->tail;
-            /* d->tail->next = d1->head; */
-            /* free(temp); */
-            /* temp = d1->tail; */
-            d->tail = temp1;
-            /* d->tail = d1->tail; */
-            free(d1);
-            deckDestroy(d2);
-            /* free(temp); */
-            /* free(temp1); */
+            d->tail->next = d1->head;
+            d->tail = d1->tail;
         }
-        /* deckDestroy(d2); */
     }
     else if (deckNotEmpty(d2)) {
         if (!(deckNotEmpty(d))) {
-            /* d->head = d2->head; */
-            /* d->tail = d2->tail; */
-            /* deckDestroy(d); */
             d = d2;
         }
         else {
-            /* puts("hi"); */
-            /* temp = d->tail->next; */
-            temp = d2->head;
-            d->tail->next = temp;
-            /* d->tail->next = d2->head; */
-            /* free(temp); */
-            temp1 = d2->tail;
-            d->tail = temp1;
-            /* d->tail = d2->tail; */
-            /* free(temp); */
-            free(d2);
-            deckDestroy(d1);
+            d->tail->next = d2->head;
+            d->tail = d2->tail;
         }
-        /* deckDestroy(d1); */
     }
-    /* else { */
-    /*     deckDestroy(d1); */
-    /*     deckDestroy(d2); */
-        
-    /* } */
+  
     
-    /* if(!(deckNotEmpty(d1))) {deckDestroy(d1);} */
-    /* if(!(deckNotEmpty(d2))) {deckDestroy(d2);} */
-   /* d1 = 0; */
-   /* d2 = 0; */
-    /* deckDestroy(d1); */
-    /* deckDestroy(d2); */
-    /* printf("doutlen: %d\n", d->length); */
-    /* d1 = 0; */
-    /* d2 = 0; */
-    /* free(d1); */
-    /* free(d2); */
-    /* free(temp1); */
-    /* free(temp); */
+    if(!(deckNotEmpty(d1))) {deckDestroy(d1);}
+    if(!(deckNotEmpty(d2))) {deckDestroy(d2);}
+   
     return d;
         
 }
