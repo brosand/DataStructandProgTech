@@ -195,7 +195,17 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             /* d->head = d1->head; */
             /* d->tail = d1->tail; */
             /* deckDestroy(d); */
-            d = d1;
+            /* d = d1; */
+            /* Deck *tDeck = d1; */
+            /* d = tDeck; */
+            /* free(d1); */
+            temp = d1->head;
+            temp1 = d1->tail;
+            d->head = temp;
+            d->tail = temp1;
+            free(d1);
+            free(d2);
+            /* puts("reached"); */
         }
         else {
             
@@ -224,7 +234,17 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             /* d->head = d2->head; */
             /* d->tail = d2->tail; */
             /* deckDestroy(d); */
-            d = d2;
+            /* d = d2; */
+            /* Deck *tDeck = d2; */
+            /* d = tDeck; */
+            /* free(d2); */
+            temp = d2->head;
+            temp1 = d2->tail;
+            d->head = temp;
+            d->tail = temp1;
+            free(d2);
+            free(d1);
+            /* puts("reached"); */
         }
         else {
             /* puts("hi"); */
@@ -241,6 +261,10 @@ Deck *deckShuffle(Deck *d1, Deck *d2) {
             deckDestroy(d1);
         }
         /* deckDestroy(d1); */
+    }
+    else {
+        free(d2);
+        free(d1);
     }
     /* else { */
     /*     deckDestroy(d1); */
