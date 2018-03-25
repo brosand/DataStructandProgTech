@@ -1,0 +1,44 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+
+inputDir = '/c/cs223/Hwk5/testFiles'
+
+if not os.path.exists(inputDir):
+    inputDir = 'testFiles' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-03-29 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copyDir('.')
+except:
+    t.testFail(100, "Could not copy files")
+    print(t.report())
+    sys.exit(0)
+
+t.copyDirFollowLinks(inputDir)
+
+if t.test(20, """make -B CC=gcc CFLAGS='-std=c99 -Wall -pedantic -g3' ants""", timeLimit = 20) == 0:
+    # can't compile
+    t.testFail(80, 'Compile failed, skipping remaining tests')
+else:
+    # sample inputs and outputs
+    t.log('# match sample inputs with sample outputs')
+    inputs = glob.glob(os.path.join(inputDir, '*.in'))
+    inputs.sort()
+    for input in inputs:
+        output = input.replace('.in', '.out')
+        t.test(5, './ants < {}'.format(os.path.basename(input)), 
+               tester.Match(open(output, "rb").read()))
+
+    # valgrind tests
+    for input in ['example1.in', 'example2.in', 'allAnts.in', 'bigCoords.in']:
+        output = input.replace('.in', '.out')
+        t.test(5, 'valgrind -q ./ants < {} > /dev/null'.format(os.path.basename(input)), 
+               tester.Match(''))
+
+print(t.report())

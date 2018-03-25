@@ -1,0 +1,56 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+
+inputDir = '/c/cs223/Hwk4/testFiles'
+
+if not os.path.exists(inputDir):
+    inputDir = 'testFiles' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-03-01 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copy('deck.c')
+except:
+    t.testFail(100, "deck.c does not exist")
+    print(t.report())
+    sys.exit(0)
+
+t.copyDirFollowLinks(inputDir)
+
+t.log("# test sample inputs and outputs")
+
+# 10 pts if deck.c exists
+t.testOK(10, "deck.c exists")
+
+# 10 pts if deck.c compiles with all flags
+t.test(10, "gcc -std=c99 -g3 -O2 -Wall -pedantic -o testDeck testDeck.c deck.c", tester.Match(b''), 20)
+
+# 10 pts if deck.c compiles at all
+if t.test(10, "gcc -std=c99 -g3 -O2 -o testDeck testDeck.c deck.c || echo compile failed", 
+          lambda s: s.find(b'compile failed') < 0, 20) == 0:
+    # can't compile
+    t.testFail(70, 'Compile failed, skipping remaining tests')
+else:
+    # sample inputs and outputs
+    # 10 points for each test
+    t.log('# match sample inputs with sample outputs')
+    inputs = glob.glob(os.path.join(inputDir, '*.in'))
+    inputs.sort()
+    for input in inputs:
+        output = input.replace('.in', '.out')
+        t.copy(input)
+        t.test(6, './testDeck < {}'.format(os.path.basename(input)), 
+               tester.Match(open(output, "rb").read()))
+
+    # valgrind
+    t.log("# valgrind test on example.in")
+    t.test(10, "exec valgrind -q --partial-loads-ok=yes --leak-check=yes ./testDeck < example.in > /dev/null",
+            tester.Match(b''),
+            30)
+
+print(t.report())

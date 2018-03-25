@@ -1,0 +1,80 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+
+inputDir = '/c/cs223/Hwk3/'
+
+if not os.path.exists(inputDir):
+    inputDir = '.' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-02-22 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copy('num.c')
+except:
+    t.testFail(100, "num.c does not exist")
+    print(t.report())
+    sys.exit(0)
+
+for i in ('num.h', 'testNum.c'):
+    t.copy(os.path.join(inputDir,i))
+
+t.log("# test sample inputs and outputs")
+
+# 10 pts if num.c exists
+t.testOK(10, "num.c exists")
+
+# 10 pts if num.c compiles with all flags
+t.test(10, "gcc -std=c99 -g3 -Wall -pedantic -o testNum testNum.c num.c", tester.Match(b''), 20)
+
+# 10 pts if num.c compiles at all
+if t.test(10, "gcc -std=c99 -g3 -o testNum testNum.c num.c || echo compile failed", 
+          lambda s: s.find(b'compile failed') < 0, 20) == 0:
+    # can't compile
+    t.testFail(70, 'Compile failed, skipping remaining tests')
+else:
+    # parse some numbers
+    for i in ('0', '1', '123', '9876543210', '12345678901234567919219501925801920164811230696811616'):
+        t.test(2, './testNum p {}'.format(i), tester.MatchNewline(i))
+
+    # parse some numbers with leading zeros
+    for i, o in (('0001', '1'), ('0123456789', '123456789')):
+        t.test(2, './testNum p {}'.format(i), tester.MatchNewline(o))
+
+    # bad numbers
+    for i in ('123bad', '-123', '123bad123'):
+        t.test(2, './testNum p {}'.format(i), tester.Match('numCreate returns 0\n'))
+
+    # run the array test
+    t.test(4, './testNum a', tester.Match('0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n'))
+
+    # numGetDigit test
+    for i in (100, 10000, 1000000):
+        t.test(4, './testNum g {}'.format(i), tester.Match(''))
+
+    # addition test
+    for x, y in ((0, 123), (1,2), (29, 112), (37**50, 39**48)):
+        t.test(2, './testNum s {} {}'.format(x,y), tester.MatchNewline(str(x+y)))
+
+    # multiplication test
+    for x, y in ((0, 123), (1,2), (29, 112), (37**50, 39**48)):
+        t.test(2, './testNum m {} {}'.format(x,y), tester.MatchNewline(str(x*y)))
+
+    # squaring test
+    for x, y in ((3, 7), (37,4), (5,9)):
+        t.test(2, './testNum q {} {}'.format(x,y), tester.MatchNewline(str(x**(2**y))))
+
+    # file output test
+    t.test(4, './testNum f test.out 12345; cat test.out', tester.Match('12345'))
+
+    # valgrind
+    t.log("# valgrind ./testNum m 123467890 987654321")
+    t.test(8, "exec valgrind -q --partial-loads-ok=yes --leak-check=yes ./testNum m 123467890 987654321 > /dev/null",
+            tester.Match(b''),
+            30)
+
+print(t.report())
