@@ -6,7 +6,7 @@
 
 struct hTable {
   int size;
-  int keys[1];
+  int keys[];
 };
 
 struct node {
@@ -38,32 +38,57 @@ void hashDestroy(HashTable hTable) {
 
 }
 
-int findNode(struct node)
+int findNode(struct node *start, int key) {
+    int out = 0;
+    struct node *temp = start;
+    while(temp != NULL) {
+        if(temp->key = key) {
+            return out
+        }
+        temp = temp->next;
+        out ++;
+    }
+    return -1;
+    
+}
 
 int hashLookup(HashTable htable, int key){
   int hashIndex = hashConvert(key);
-  int i = 0;
-
-  hTable[hashIndex]->head.key;
-  int out =
-  //don't forget case where the hashindex isn't there
-  while(hTable[hashIndex]->head.key != key) {
-
+  
+  if(hTable.keys[hashIndex]) {
+      return(hTable.keys[hashIndex]->head[findNode(hTtable.keys[hashIndex]->head)])
   }
-
-
-
-  int probe;
-
-  for(probe = key % size;
-      htable->keys[probe] != NULL;
-      probe = (probe + 1) % size) {
-        if(hTable->keys[probe] == id) {
-          return hTable->keys
-        }
-      }
+  else {
+      return -1;
+      //this is not quite right
+  }
 }
 
-void hashSet(Hashtable htable, int key, int value){
 
+
+
+void hashSet(Hashtable htable, int key, int value){
+    //assume htable.keys[hashindex exists]
+    
+    struct node newTail;
+    newTail = malloc(sizeof(struct node));
+    
+    newTail->value = value;
+    newTail->key = key;
+    newTail->next = NULL;
+    //also think about the fact that every dictNode could be set with null head and tail
+    if (hTable.keys[hashIndex]) {
+        struct dictNode dNode = hTable.keys[hashIndex];
+        
+        dNode->tail->next = newTail;
+        dNode->tail = newTail
+        //do i need to free dictnode
+    }
+    else {
+        struct dictNode dNode;
+        dNode = malloc(sizeof(dictNode));
+        dNode->head = newTail;
+        dNode->tail = newTail;
+        hTable[hashIndex] = dictNode;
+    }
 }
