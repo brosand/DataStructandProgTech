@@ -17,7 +17,7 @@
 /* TODO: test hashSet*/
 /* TODO: Build removeHash */
 /* TODO: test removeHash */
-
+/* TODO: figure out hasher */
 struct table {
   int size;
   struct dictNode *keys;
@@ -25,7 +25,7 @@ struct table {
 
 struct node {
   int value;
-  int key;
+  const char *key;
   struct node *next;
 };
 
@@ -35,61 +35,44 @@ struct dictNode {
   struct node *tail;
 };
 
-int hashConvert(const char *s) {
+/* typedef struct dictNode Chain; */
+
+int hashConvert(const char *key) {
      size_t h;
      unsigned const char *us;
      
-     us = (unsigned const char *) s;
+     us = (unsigned const char *) key;
      
      h = 0;
      while(*us != '\0') {
          h = h * MULTIPLIER + *us;
          us++;
      }
+     return h;
          
     
 }
 
-Table hashTableCreate(int n) {
+Table hashTableCreate(int size) {
   Table htable;
 
   /* int size; */
 
   /* size = (int) (n * ) */
 
-  htable = malloc(sizeof(*htable) + sizeof(int) * (n-1));
+  htable = malloc(sizeof(*htable) + sizeof(int) * (size-1));
+  return htable;
 
 
 
 }
-void chainFree(struct dictNode chain) {
-    struct node *start = chain->head;
-    while (chain->head != NULL){
-        chain->head = start->next;
-        free(start);
-        start = chain->head;
-    }
-    free(chain->tail);
-}
 
-void hashDestroy(Table h) {
-    for(int i = 0; i < table->size; i++) {
-        dictNode d = table->keys[i];
-        if (d!=NULL) {chainFree(d)}
-    }
-    
-    free(h->keys);
-    free(h);
-}
-
-
-
-int findNode(struct node *start, int key) {
+int findNode(struct node *start, const char *key) {
     int out = 0;
     struct node *temp = start;
     while(temp != NULL) {
-        if(temp->key = key) {
-            return out
+        if(temp->key == key) {
+            return out;
         }
         temp = temp->next;
         out ++;
@@ -98,25 +81,96 @@ int findNode(struct node *start, int key) {
     
 }
 
-void removeKey(Table h, int key) {
+void hashKey(Table h, const char *key, int value){
+    //assume htable.keys[hashindex exists]
+    int hashIndex = hashConvert(key);
+    struct node *newTail;
+    newTail = malloc(sizeof(struct node));
+    
+    newTail->value = value;
+    newTail->key = key;
+    newTail->next = NULL;
+    /* assert(h->keys[hashIndex]); */
+    /* (struct node*) */
+    struct node *start = h->keys[hashIndex].head;
+    //also think about the fact that every dictNode could be set with null head and tail
+    if (start != NULL) {
+        int keyChainIndex = findNode(start,key);
+        
+        if (keyChainIndex != -1) {
+            /* h->keys[hashIndex].head->value = value; */
+            /* start[key] */
+            start[keyChainIndex].value = value;
+            //TODO Probably won't work because not really array
+        }
+        else {
+            h->keys[hashIndex].tail->next = newTail;
+            h->keys[hashIndex].tail = newTail;
+            
+            /* struct Chain dNode = h.keys[hashIndex]; */
+            
+            /* dNode->tail->next = newTail; */
+            /* dNode->tail = newTail; */
+        }
+        //dont forget there could be one thing in here
+        //do i need to free dictnode
+    }
+    else {
+        /* Chain *dNode; */
+        /* dNode = malloc(sizeof(struct dictNode)); */
+        /* dNode->head = newTail; */
+        /* dNode->tail = newTail; */
+        /* h[hashIndex] = dNode; */
+        h->keys[hashIndex].head = newTail;
+        h->keys[hashIndex].tail = newTail;
+        h->size++;
+    }
+}
+void chainFree(Chain chain) {
+    struct node *start = chain.head;
+    while (chain.head != NULL){
+        chain.head = start->next;
+        free(start);
+        start = chain.head;
+}
+    free(chain.tail);
+}
+
+void hashDestroy(Table h) {
+    for(int i = 0; i < h->size; i++) {
+        Chain d = (h->keys[i]);                                   
+        if (d.head != NULL) {chainFree(d);}
+    }
+    
+    free(h->keys);
+    free(h);
+}
+
+
+
+
+void removeKey(Table h, const char *key) {
 
     int hashIndex = hashConvert(key);
-    struct node chain = h->keys[hashIndex];
-    assert(chain);
+    /* struct node chain = h->keys[hashIndex]; */
+    /* assert(chain); */
+    Chain chain = h->keys[hashIndex];
     
-    int chainIndex = findNode[key];
+    int chainIndex = findNode(chain.head,key);
     assert(chainIndex != -1);
     
-    struct node temp;
-    temp = malloc(sizeof(node));
+    struct node *temp;
+    temp = malloc(sizeof(struct node));
+    /* temp = malloc(sizeof(struct node)); */
+/* TODO THIS TEMP LINE ABOVE MIGHT BE IMPORTANT */
     //what about case where it is a one length array
     if(chainIndex == 0){
-        temp = chain->head;
-        chain.head = chain->head->next;
+        temp = chain.head;
+        chain.head = chain.head->next;
     }
     else {
         while (temp->next->key != key) {
-            temp = temp->next
+            temp = temp->next;
          }
         if(chain.tail == temp->next) {
             free(temp->next);
@@ -124,8 +178,8 @@ void removeKey(Table h, int key) {
             chain.tail = temp;
         }
         else {
-            struct node tempNext;
-            /* tempNext = malloc(sizeof(node)); */
+            struct node *tempNext;
+            /* tempNext = malloc(sizeof(struct node)); */
             tempNext = temp->next;
             temp->next = temp->next->next;
             free(tempNext);
@@ -138,43 +192,19 @@ void removeKey(Table h, int key) {
    
 }
 
-int hashLookup(Table h, int key){
+int hashLookup(Table h, const char *key){
   int hashIndex = hashConvert(key);
   
-  if(h.keys[hashIndex]) {
-      return(h.keys[hashIndex]->head[findNode(hTtable.keys[hashIndex]->head)])
+  if(h->keys[hashIndex].head != NULL) {
+      return((h->keys[hashIndex].head[findNode(h->keys[hashIndex].head,key)]).value);
   }
-  else {
+  /* else { */
       return -1;
       //this is not quite right
-  }
+  /* } */
+  /* return -1; */
 }
 
 
 
 
-void hashSet(Hashtable htable, int key, int value){
-    //assume htable.keys[hashindex exists]
-    
-    struct node newTail;
-    newTail = malloc(sizeof(struct node));
-    
-    newTail->value = value;
-    newTail->key = key;
-    newTail->next = NULL;
-    //also think about the fact that every dictNode could be set with null head and tail
-    if (h.keys[hashIndex]) {
-        struct dictNode dNode = h.keys[hashIndex];
-        
-        dNode->tail->next = newTail;
-        dNode->tail = newTail
-        //do i need to free dictnode
-    }
-    else {
-        struct dictNode dNode;
-        dNode = malloc(sizeof(dictNode));
-        dNode->head = newTail;
-        dNode->tail = newTail;
-        h[hashIndex] = dictNode;
-    }
-}
