@@ -1,8 +1,16 @@
+struct element;
 
+struct table;
+
+struct node;
+
+struct dictNode;
 
 typedef struct table *Table;
 
 typedef struct dictNode Chain;
+
+/* typedef struct element struct element; */
 
 
 /* HashTable hashTableCreate(int n, int keyList[], int valueList[]); */
@@ -13,12 +21,15 @@ typedef struct dictNode Chain;
 
 /* void hashSet(Hashtable htable, int key, int value); */
 
+struct element eleCreate(int x, int y, int z, char ant);
+
+char elePrint(Table h, const char *key);
 
 int hashConvert(const char *key);
 
 Table hashTableCreate(int size);
 
-void hashKey(Table h, const char *key, int value);
+void hashVal(Table h, const char *key, int x, int y, int z, char ant);
 
 void chainFree(Chain chain);
 
@@ -28,4 +39,4 @@ void hashDestroy(Table h);
 
 void removeKey(Table h, const char *key);
 
-int hashLookup(Table h, const char *key);
+struct element hashLookup(Table h, const char *key);

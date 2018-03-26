@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <assert.h>
-
 #include "intChainHash.h"
 
 #define MULTIPLIER (47)
@@ -18,24 +17,44 @@
 /* TODO: Build removeHash */
 /* TODO: test removeHash */
 /* TODO: figure out hasher */
+
+struct element {
+    int x;
+    int y;
+    int z;
+    char ant;
+};
+
 struct table {
   int size;
   struct dictNode *keys;
 };
 
 struct node {
-  int value;
+  struct element value;
   const char *key;
   struct node *next;
 };
 
 struct dictNode {
-  struct node *head;
-
-  struct node *tail;
+    struct node *head;
+    struct node *tail;
 };
-
+/* typedef struct element struct element; */
 /* typedef struct dictNode Chain; */
+struct element eleCreate(int x, int y, int z, char ant) {
+    struct element out;
+    out.x = x;
+    out.y = y;
+    out.z = z;
+    out.ant = ant;
+    return out;
+}
+
+char elePrint(Table h, const char *key) {
+    return hashLookup(h, key).ant;
+}
+
 
 int hashConvert(const char *key) {
      size_t h;
@@ -81,8 +100,9 @@ int findNode(struct node *start, const char *key) {
     
 }
 
-void hashKey(Table h, const char *key, int value){
+void hashVal(Table h, const char *key, int x, int y, int z, char ant){
     //assume htable.keys[hashindex exists]
+    struct element value = eleCreate(x,y,z,ant);
     int hashIndex = hashConvert(key);
     struct node *newTail;
     newTail = malloc(sizeof(struct node));
@@ -192,14 +212,14 @@ void removeKey(Table h, const char *key) {
    
 }
 
-int hashLookup(Table h, const char *key){
+struct element hashLookup(Table h, const char *key){
   int hashIndex = hashConvert(key);
   
-  if(h->keys[hashIndex].head != NULL) {
-      return((h->keys[hashIndex].head[findNode(h->keys[hashIndex].head,key)]).value);
-  }
+  assert(h->keys[hashIndex].head != NULL);
+  return((h->keys[hashIndex].head[findNode(h->keys[hashIndex].head,key)]).value);
+  
   /* else { */
-      return -1;
+      /* return NULL; */
       //this is not quite right
   /* } */
   /* return -1; */
