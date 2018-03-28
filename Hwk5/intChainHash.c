@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
+
 #include "intChainHash.h"
 
 #define MULTIPLIER (47)
@@ -27,7 +29,7 @@ struct element {
 
 struct table {
   int size;
-  struct dictNode *keys;
+  struct chain *keys;
 };
 
 struct node {
@@ -36,7 +38,7 @@ struct node {
   struct node *next;
 };
 
-struct dictNode {
+struct chain {
     struct node *head;
     struct node *tail;
 };
@@ -55,32 +57,63 @@ char elePrint(Table h, const char *key) {
     return hashLookup(h, key).ant;
 }
 
+#define BASE (256)
 
-int hashConvert(const char *key) {
-     size_t h;
-     unsigned const char *us;
-     
-     us = (unsigned const char *) key;
-     
-     h = 0;
-     while(*us != '\0') {
-         h = h * MULTIPLIER + *us;
-         us++;
-     }
-     return h;
-         
-    
+int hashConvert(const char *s)
+{
+    int h;
+    int m = 7919;
+    unsigned const char *us;
+
+    /* cast s to unsigned const char * */
+    /* this ensures that elements of s will be treated as having values >= 0 */
+    us = (unsigned const char *) s;
+
+    h = 0;
+    while(*us != '\0') {
+        h = (h * BASE + *us) % m;
+        us++;
+    } 
+
+    return h;
 }
 
+/* int hashConvert(const char *key) { */
+/*      /\* size_t h; *\/ */
+/*     int h; */
+/*     unsigned const char *us; */
+     
+/*      us = (unsigned const char *) key; */
+     
+/*      h = 0; */
+/*      while(*us != '\0') { */
+/*          h = h * MULTIPLIER + *us; */
+/*          us++; */
+/*      } */
+/*      /\* printf("hash value is %zu\n", h); *\/ */
+/*      printf("hash value is %d\n", h); */
+     
+/*      return h; */
+         
+    
+/* } */
+
 Table hashTableCreate(int size) {
-  Table htable;
+  struct table *t;
 
   /* int size; */
 
   /* size = (int) (n * ) */
-
-  htable = malloc(sizeof(*htable) + sizeof(int) * (size-1));
-  return htable;
+  t = malloc(sizeof(Table));
+  t->size = size;
+  t->keys = malloc(sizeof(struct chain) * (size-1));
+  for (int i = 0; i < size; i++) {
+      Chain chain;// = malloc(sizeof(Chain));
+      /* chain.head = NULL; */
+      /* chain.tail = NULL; */
+      t->keys[i] = chain;
+  }
+  return t;
 
 
 
@@ -104,6 +137,7 @@ void hashVal(Table h, const char *key, int x, int y, int z, char ant){
     //assume htable.keys[hashindex exists]
     struct element value = eleCreate(x,y,z,ant);
     int hashIndex = hashConvert(key);
+    printf("%d",hashIndex);
     struct node *newTail;
     newTail = malloc(sizeof(struct node));
     
@@ -214,7 +248,9 @@ void removeKey(Table h, const char *key) {
 
 struct element hashLookup(Table h, const char *key){
   int hashIndex = hashConvert(key);
-  
+  printf("%d", hashIndex);
+  printf("this line is here");
+  fflush(stdout);
   assert(h->keys[hashIndex].head != NULL);
   return((h->keys[hashIndex].head[findNode(h->keys[hashIndex].head,key)]).value);
   

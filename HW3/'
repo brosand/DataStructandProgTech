@@ -1,0 +1,205 @@
+#include "num.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+/*
+ * High-precision arithmetic on non-negative number in base 10.
+ */
+
+struct num {
+    int length;
+    int *num;
+};
+/* constructs a num from a string */
+/* string contains representation of the number
+ * in base 10, e.g. numCreate("314159");
+ * Returns a null pointer (0) if the string contains any non-digits.
+ * Leading zeros are OK: numCreate("012") parses as 12.
+ * Empty string parses as 0 */
+ struct num * numCreate(const char *s){
+   int *out; 
+   struct num *s2;
+   
+   s2 = malloc(sizeof(struct num));
+   s2->length = strlen(s);
+   s2->num = malloc(sizeof(int) * s2->length);
+   
+   if(strlen(s) == 0) { s2->num = 0; return s2;}
+   int last = 0;
+   int follow = 0;
+   for (int i = 0; i < strlen(s); i++) {
+       int val = s[i+follow] - '0';
+       if (isdigit(val) == 0) {
+           int *t = NULL;
+           return (t);
+       }
+       else if (val == 0) {
+           if (last != 0) {
+               s2->num[i] = val;
+           }
+           else {
+               s2->length = (s2->length - 1);
+               s2->num = malloc(s2->length);
+               follow++;
+               i = 0;
+           }
+       }
+       else {
+           (s2->num)[i] = val;
+           last = 1;
+       }
+           
+    
+    }
+   if (last == 0) {
+       free(s2->num);
+       s2->length = 1;
+       s2->num = malloc(1);
+       (s2->num)[0] = 0;
+       
+   }
+ 
+   
+   return s2;
+   
+}
+
+/* Free all resources used by a num */
+struct void numDestroy(Num *n){
+    free(n->num);
+    free(n->length);
+    free(n);
+    
+}
+
+/* Get the value of the i-th least significant digit of a num.
+ * Returns 0 if i is out of range.
+ * Example:
+ *   n = numCreate("12345");
+ *   numGetDigit(n, 0) == 5
+ *   numGetDigit(n, 3) == 2
+ *   numGetDigit(n, 17) == 0
+ *   numGetDigit(n, -12) == 0
+ */
+struct int numGetDigit(const num *n, int i){
+    int nlen = n->length 
+    if (i > (nlen-1)) {return 0;}
+    return n->num[i];
+}
+
+/* add two nums, returning a new Num */
+/* does not destroy its inputs, caller must destroy output */
+struct num * numAdd(const Num *x, const Num *y){
+    
+    /* CHECK TO SEE IF THE +1 IS RIGHT THERE MIGHT BE ONE OFF ON THE LENGTHS OF ARRAYS */
+   struct num *s2;
+   s2 = malloc(sizeof(struct num));
+   int maxlen = 0;
+   
+   if (x->length > y->length) {
+       maxlen = (x->length + 1);
+   }
+   else {
+       maxlen = (y->length + 1);
+   }
+   s2->length = maxlen; 
+   s2->num = malloc(sizeof(int)* s2->length);
+   int carry = 0;
+   int a = 0;
+   int b = 0;
+   int sum = 0;
+   int remainder = 0;
+   for (int i = 0; i < maxlen; i++) {
+       if ((x->length-1) > i) {
+           a = x->num[i];
+       }
+       else {
+           a = 0;
+       }
+
+       if ((y->length-1) > i) {
+           b = y->num[i];
+       }
+       else {
+           b = 0;
+       }
+
+
+       sum = (x->num[i] + y->num[i] + carry);
+       remainder = (sum % 10);
+       carry = sum / 10;
+       s2->num[i] = remainder;
+
+   }
+    /* BASICALLY FIGURE OUT WHAT DO DO IF THE FIRST DIGIT IS 0 --> actually probably isn't a problem*/
+    
+   return s2;
+}
+
+/* multiply two nums, returning a new Num */
+/* does not destroy its inputs, caller must destroy output */
+struct num * numMultiply(const Num *x, const Num *y){
+     
+   /* CHECK TO SEE IF THE +1 IS RIGHT THERE MIGHT BE ONE OFF ON THE LENGTHS OF ARRAYS */
+   struct num *s2;
+   s2 = malloc(sizeof(struct num));
+   int maxlen = 0;
+
+   /* if (x->length > y->length) { */
+   /*     maxlen = (x->length ** 2); */
+   /* } */
+   /* else { */
+   /*     maxlen = (y->length ** 2); */
+   /* } */
+   maxlen = (x->length + y->length);
+   s2->length = maxlen;
+   
+   s2->num = malloc(sizeof(int)* s2->length);
+   int carry = 0;
+   int a = 0;
+   int b = 0;
+   int sum = 0;
+   int remainder = 0;
+   
+   for (int j = 0; j < x->length; j++) {
+       for (int k = 0; k < y->length; k++) {
+           for (int i = 0; i < x->num[j]; i++) {
+               /* struct num *temp = numAdd() */
+               
+           }
+       }
+   }
+   for (int i = 0; i < maxlen; i++) {
+       if ((x->length-1) > i) {
+           a = x->num[i];
+       }
+       else {
+           a = 0;
+       }
+
+       if ((y->length-1) > i) {
+           b = y->num[i];
+       }
+       else {
+           b = 0;
+       }
+
+
+       sum = (x->num[i] + y->num[i] + carry);
+       remainder = (sum % 10);
+       carry = sum / 10;
+       s2->num[i] = remainder;
+
+   }
+   
+   return s2;
+
+}
+
+/* Print the digits of a number to file.
+ * Do not print any leading zeros unless n is zero. */
+struct void numPrint(const num *n, FILE *f){
+    fprintf(f, "%d", n->num);
+}
+

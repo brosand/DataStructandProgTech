@@ -1,5 +1,5 @@
 #include "ants.h"
-#include "intChainHash.h"
+#include "openHash.h"
 /* #include "intChainHash.h" */
 
 #include <stdio.h>
@@ -8,87 +8,126 @@
 
 #define NUM_ANTS (256)
 #define UNIVERSE_DIM (4294967296)
-#define HASH_SIZE (300)
+#define HASH_SIZE (8000)
+#define INTLEN (10)
 
 
-const char *keyConvert(int x, int y, int z) {
-    /* char *xx; */
-    /* char *yy; */
-    /* char *zz; */
-    /* xx = malloc(10); */
-    /* yy = malloc(10); */
-    /* zz = malloc(10); */
-    char * out;
-    out = malloc(30);
-    sprintf(out,"%010d", x);
-    sprintf(&out[10],"%010d", y);
-    sprintf(&out[20],"%010d", z);
-    return out;
-    /* atol(output, a, 10); */
-    /* return a; */
-    /* return atol() */
-} 
+typedef struct {
+    int x;
+    int y;
+    int z;
+} ant;
+
+// char *keyConvert(int x, int y, int z) {
+//     /* char *xx; */
+//     /* char *yy; */
+//     /* char *zz; */
+//     /* xx = malloc(10); */
+//     /* yy = malloc(10); */
+//     /* zz = malloc(10); */
+//     char *outx;
+//     char *outy;
+//     char *outz;
+//     int lenx = snprintf( NULL, 0, "%d", x );
+//     int leny = snprintf( NULL, 0, "%d", y );
+//     int lenz= snprintf( NULL, 0, "%d", z );
+
+//     // len = (int)((ceil(log10(z))+1)*sizeof(char))
+
+//     outx = malloc(lenx + 1);
+//     outy = malloc(leny + 1);
+//     outz = malloc(lenz + 1);
+
+//     snprintf(outx, lenx + 1, "%010d", x);
+//     snprintf(outy, leny + 1, "%010d", y);
+//     snprintf(outz, lenz + 1, "%010d", z);
+
+    
+   
+//     return out;
+//     /* atol(output, a, 10); */
+//     /* return a; */
+//     /* return atol() */
+// } 
 
 int main() {
+    ant *antLoc;
+    antLoc = calloc(NUM_ANTS, sizeof(ant));
+    
     //TODO make the stuff into pointers, passing the whole table around is bad
     //set up antspace
-    Table t = hashTableCreate(HASH_SIZE);
+   //TODO make it so that the ants hold their spot and don't refresh
+     
     
+    // printf("HI");
+    table *t = createTable(HASH_SIZE);
+
     
     //read input
-    char input = getchar();
-    char ant = input;
+    unsigned char input = getchar();
+    unsigned char ant = input;
     int x = 0;
     int y = 0;
     int z = 0;
-  putchar('b');  
+  // putchar('b');  
     while(input != EOF) {
-        putchar('1');
+        // printf("%d", input);
+            // printf("hi");
+    // fflush(stdout);
+        x = antLoc[input].x;
+        y = antLoc[input].y;
+        z = antLoc[input].z;
+        //putchar('1');
         /* if(ant == NULL) { */
             /* if (input != '\n') */
         /* } */
         switch (input){
             case 'h': {
                 x--;
-        putchar('2');
+        //putchar('2');
             };
             case 'j': {
                 y--;
-        putchar('3');
+                y--;
+        //putchar('3');
             };
             case 'k': {
                 y++;
-        putchar('4');
+                y++;
+        //putchar('4');
             };
             case 'l': {
                 x++;
-        putchar('5');
+                x++;
+        //putchar('5');
             };
             case '<': {
                 z++;
-        putchar('6');
+                z++;
+        //putchar('6');
             };
             case '>': {
             z--;
-        putchar('7');
+                z--;
+        //putchar('7');
             };
             case '*': {
-                x = 2*x;
-                y = 2*y;
-                z = 2*z;
-        putchar('8');
+                x = 2 * x;
+                y = 2 * y;
+                z = 2 * z;
+        //putchar('8');
             };
             case '.': {
-               hashVal(t, keyConvert(x,y,z), x, y, z, ant); 
-        putchar('9');
+               genInsert(t, x, y, z, ant); 
+        //putchar('9');
             };
             case '?': {
-                putchar(elePrint(t, keyConvert(x,y,z)));
-        putchar('0');
+                putchar(antPrint(t, x, y, z));
+        //putchar('0');
             };
             case '\n': {
-                char next = getchar();
-        putchar('a');
+                unsigned char next = getchar();
+        //putchar('a');
                 if (next == EOF) {
                     
                         input = next;
@@ -98,7 +137,10 @@ int main() {
             }
                 }
     input = getchar();
+    // putchar(input);
     }
+    free(antLoc);
+    tDelete(t);
     return 0;
 }
 

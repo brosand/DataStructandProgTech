@@ -9,12 +9,13 @@ CFLAGS=-std=c99 -Wall -pedantic -g3
 
 all: ants
 
-ants: ants.o intChainHash.o
+ants: ants.o openHash.o
 	$(CC) $(CFLAGS) -o $@ $^
 	echo "ants built"
 
 ants.o: ants.c ants.h
-intChainHash.o: intChainHash.c intChainHash.h
+# intChainHash.o: intChainHash.c intChainHash.h
+openHash.o: openHash.c openHash.h
 
 test: ants
 	./ants.c
