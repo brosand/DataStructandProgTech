@@ -61,13 +61,7 @@ void tDelete(table *t) {
 }
 
 unsigned int hash(int x, int y, int z, const int size) {
-    /* printf("x: %d", x); */
-    /* printf("y: %d", y); */
-    /* printf("z: %d", z); */
-    /* printf("line 67:%d\n", (((x + y + z) + size) % (size-1))); */
     return (((x + y + z) + size) % (size-1));
-    /* return 0; */
-    //hopefully adding size makes it always at least 1, but make sure x y z are pos
 }
 
 void tInsert(table *t, value *val){

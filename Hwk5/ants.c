@@ -47,36 +47,9 @@ int main() {
     unsigned int x = antLoc[nAnt]->x;
     unsigned int y = antLoc[nAnt]->y;
     unsigned int z = antLoc[nAnt]->z;
-    /* printf("%d\n\n\n\n\n", antLoc[ant].x); */
-    /* int ct = 0; */
     input = getchar();
     /* unsigned int q = antLoc[100]->x; */
     while(input != EOF) {
-    /* printf("input: %c\n", input); */
-    /* q+=10; */
-    /* antLoc[100]->x = antLoc[100]->x + 10; */
-        /* input = getchar(); */
-        /* assert(ct < 18); */
-        /* ct++; */
-        // printf("%d", input);
-            // printf("hi");
-    // fflush(stdout);
-       
-        /* printf("x: %d\n", x); */
-        /* printf("y: %d\n", y); */
-        /* printf("z: %d\n", z); */
-        //putchar('1');
-        /* if(ant == NULL) { */
-            /* if (input != '\n') */
-        /* printf("57 "); */
-        /*     putchar(input); */
-        /*     putchar(input); */
-        /*     printf(" 59"); */
-        /* /\*     /\\* putchar('?'); *\\/ *\/ */
-        /* /\*     /\\* putchar('\?'); *\\/ *\/ */
-        /*     putchar('\n'); */
-        /* /\* } *\/ */
-    /* printf("ant:%c x%u, y%u, z%u\n",nAnt, x, y, z); */
         switch (input){
             case 'h': 
                 x--;
