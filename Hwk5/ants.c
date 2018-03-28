@@ -5,10 +5,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #define NUM_ANTS (256)
 #define UNIVERSE_DIM (4294967296)
-#define HASH_SIZE (8000)
+#define HASH_SIZE (9000)
 #define INTLEN (10)
 
 
@@ -18,39 +19,8 @@ typedef struct {
     int z;
 } ant;
 
-// char *keyConvert(int x, int y, int z) {
-//     /* char *xx; */
-//     /* char *yy; */
-//     /* char *zz; */
-//     /* xx = malloc(10); */
-//     /* yy = malloc(10); */
-//     /* zz = malloc(10); */
-//     char *outx;
-//     char *outy;
-//     char *outz;
-//     int lenx = snprintf( NULL, 0, "%d", x );
-//     int leny = snprintf( NULL, 0, "%d", y );
-//     int lenz= snprintf( NULL, 0, "%d", z );
 
-//     // len = (int)((ceil(log10(z))+1)*sizeof(char))
-
-//     outx = malloc(lenx + 1);
-//     outy = malloc(leny + 1);
-//     outz = malloc(lenz + 1);
-
-//     snprintf(outx, lenx + 1, "%010d", x);
-//     snprintf(outy, leny + 1, "%010d", y);
-//     snprintf(outz, lenz + 1, "%010d", z);
-
-    
-   
-//     return out;
-//     /* atol(output, a, 10); */
-//     /* return a; */
-//     /* return atol() */
-// } 
-
-int main() {
+int main() { 
     ant *antLoc;
     antLoc = calloc(NUM_ANTS, sizeof(ant));
     
@@ -64,13 +34,17 @@ int main() {
 
     
     //read input
-    unsigned char input = getchar();
+    unsigned int input = getchar();
     unsigned char ant = input;
     int x = 0;
     int y = 0;
     int z = 0;
-  // putchar('b');  
+  // putchar('b');
+    /* int ct = 0; */
     while(input != EOF) {
+        /* putchar(input); */
+        /* assert(ct < 18); */
+        /* ct++; */
         // printf("%d", input);
             // printf("hi");
     // fflush(stdout);
@@ -126,7 +100,8 @@ int main() {
         //putchar('0');
             };
             case '\n': {
-                unsigned char next = getchar();
+                unsigned int next = getchar();
+                /* putchar(next); */
         //putchar('a');
                 if (next == EOF) {
                     

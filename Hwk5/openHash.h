@@ -38,7 +38,7 @@ value *tLookup(table *t, int x, int y, int z);
 
 char antPrint(table *t, int x, int y, int z);
 
-int hash(int x, int y, int z, const int size);
+unsigned int hash(int x, int y, int z, const int size);
 //TODO maybe make the keys constant
 
 #endif // __OPENHASH_H_
