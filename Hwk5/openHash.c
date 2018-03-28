@@ -64,7 +64,8 @@ unsigned int hash(int x, int y, int z, const int size) {
     /* printf("x: %d", x); */
     /* printf("y: %d", y); */
     /* printf("z: %d", z); */
-    return (unsigned int)(((x + y + z) + size)%size);
+    /* printf("line 67:%d\n", (((x + y + z) + size) % (size-1))); */
+    return (((x + y + z) + size) % (size-1));
     /* return 0; */
     //hopefully adding size makes it always at least 1, but make sure x y z are pos
 }
@@ -73,12 +74,16 @@ void tInsert(table *t, value *val){
     value *colVal;
     colVal = malloc(sizeof(value));
 //TODO the moving by more than 1  could be good less collisions
+    
+    /* printf("x%d, y%d, z%d, s%d\n",val->x, val->y, val->z , t->size); */
+    
     int hashIndex = hash(val->x, val->y, val->z , t->size);
+    /* printf("%d\n", hashIndex); */
     
     colVal = t->items[hashIndex];
     
     /* int loc = 1; */
-    while(colVal != NULL) {
+    while(colVal != NULL && hashIndex < t->size && ((colVal->x != val->x) || (colVal->y != val->y) || (colVal->z != val->z))) {
         hashIndex++;
     /* printf (" T%d", hashIndex); */
         colVal = t->items[hashIndex];
@@ -98,14 +103,18 @@ value *tLookup(table *t, int x, int y, int z) {
     }
         // printf("%d\n", hashIndex);
         
-    while((foundVal->x != x) && (foundVal->y != y) && (foundVal->z != z) &&  (hashIndex < s)) {
-        // printf("%d\n", hashIndex);
+    while((foundVal->x != x) || (foundVal->y != y) || (foundVal->z != z)){// &&  (hashIndex < s)) {
+        // printf("%d\n", hashIndex); 
         hashIndex++; 
         foundVal = t->items[hashIndex];
-        if(foundVal != NULL) {
+        if(foundVal == NULL) {
             return NULL;
         }
     }
+    
+    
+    /* printf("wantx%u, y%u, z%u\n", x, y, z); */
+    /* printf("other: x%u, y%u, z%u\n", foundVal->x, foundVal->y, foundVal->z); */
     return foundVal;
     
 }
