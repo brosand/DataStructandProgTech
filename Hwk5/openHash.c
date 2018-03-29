@@ -8,6 +8,15 @@
 
 #define M_VAL (100)
 
+
+char *keyConvert(int x, int y, int z) {
+    char * out;
+    out = malloc(31);
+    sprintf(out,"%010u", x);
+    sprintf(&out[10],"%010u", y);
+    sprintf(&out[20],"%010u", z);
+    return out;
+}
 void genInsert(table *t,  int x, int y, int z, char ant){
     value *val;
     val = malloc(sizeof(value));
@@ -60,13 +69,32 @@ void tDelete(table *t) {
     free(t);
 }
 
+/* unsigned int hash(int x, int y, int z, const int size) { */
+/*     return (((x + y + z) + size) % (size-1)); */
+/* } */
+
 unsigned int hash(int x, int y, int z, const int size) {
-    return (((x + y + z) + size) % (size-1));
-}
+        char *key = keyConvert(x,y,z);
+            /* ; */
+        /* key = keyConvert(x,y,z); */
+        unsigned int hash = 5381;
+        int c;
+
+        while (c = *key++){
+            /* char *tmp = (key & 5; */
+            /* hash = ((hash << 5) | (hash >> (sizeof(hash) - 5))); */
+            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+            /* free(tmp); */
+        }
+        /* if(key){free(key);} */
+        /* if (key) {free(*key);} */
+        
+        return hash % (size-1);
+    }
 
 void tInsert(table *t, value *val){
     value *colVal;
-    colVal = malloc(sizeof(value));
+    /* colVal = malloc(sizeof(value)); */
 //TODO the moving by more than 1  could be good less collisions
     
     /* printf("x%d, y%d, z%d, s%d\n",val->x, val->y, val->z , t->size); */
@@ -83,6 +111,7 @@ void tInsert(table *t, value *val){
         colVal = t->items[hashIndex];
         /* loc++;     */
     }
+    free(colVal);
     t->items[hashIndex] = val;
     t->count++;
 }

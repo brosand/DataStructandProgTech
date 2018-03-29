@@ -20,6 +20,7 @@ typedef struct {
 } ant;
 
 
+
 int main() { 
     ant **antLoc;
     antLoc = calloc(NUM_ANTS, sizeof(ant*));
@@ -135,6 +136,8 @@ int main() {
     /* putchar('.'); */
     /* putchar('?'); */
     /* putchar('*'); */
+    for (int i = 0; i < NUM_ANTS; i++) {
+    free(antLoc[i]);}
     free(antLoc);
     tDelete(t);
     return 0;

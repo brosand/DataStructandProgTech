@@ -33,7 +33,7 @@ unsigned int
 
 int main() {
     unsigned int t = -1;
-    const char *key = keyConvert(101,100,100);
+    const char *key = keyConvert(101123,10230,156500);
     unsigned int hashed = hash(key);
     
     printf("%u", hashed);

@@ -23,10 +23,11 @@ typedef struct {
 
 typedef table *Table;
 
-
+char *keyConvert(int x, int y, int z);
+                 
 table *createTable(int size);
 
-void genInsert(table *t, char *key, char ant);
+void genInsert(table *t, int x, int y, int z, char ant);
 
 // value *eleVal(value *val);
 
@@ -34,11 +35,11 @@ void tInsert(table *t, value *val);
 
 void tDelete(table *t);
 
-value *tLookup(table *t, char *key);
+value *tLookup(table *t, int x, int y, int z);
 
-char antPrint(table *t, char *key);
+char antPrint(table *t, int x, int y, int z);
 
-unsigned int hash(char *key, const int size);
+unsigned int hash(int x, int y, int z, const int size);
 //TODO maybe make the keys constant
 
 #endif // __OPENHASH_H_
