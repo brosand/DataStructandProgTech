@@ -9,7 +9,7 @@
 
 #define NUM_ANTS (256)
 #define UNIVERSE_DIM (4294967296)
-#define HASH_SIZE (90000)
+#define HASH_SIZE (3 )
 #define INTLEN (10)
 
 
@@ -51,6 +51,7 @@ int main() {
     input = getchar();
     /* unsigned int q = antLoc[100]->x; */
     while(input != EOF) {
+        // printf("ant: %c\n", nAnt);
         switch (input){
             case 'h': 
                 x--;
