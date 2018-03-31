@@ -1,0 +1,54 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+import random
+
+inputDir = '/c/cs223/Hwk6/testFiles'
+
+if not os.path.exists(inputDir):
+    inputDir = 'testFiles' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-04-05 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copyDir('.')
+except:
+    t.testFail(100, "Could not copy files")
+    print(t.report())
+    sys.exit(0)
+
+t.copyDirFollowLinks(inputDir)
+
+# we demanded no arguments, but let's keep it simple and just build ants
+if t.test(20, """make -B CC=gcc CFLAGS='-std=c99 -Wall -pedantic -g3' treeSort""", timeLimit = 20) == 0:
+    # can't compile
+    t.testFail(80, 'Compile failed, skipping remaining tests')
+else:
+    # sample inputs and outputs
+    t.log('# match sample inputs with sample outputs')
+    inputs = glob.glob(os.path.join(inputDir, '*.in'))
+    inputs.sort()
+    for input in inputs:
+        output = input.replace('.in', '.out')
+        t.test(4, './treeSort < {}'.format(os.path.basename(input)), 
+               tester.Match(open(output, "rb").read()))
+
+    # bad inputs should produce error
+    bad = glob.glob(os.path.join(inputDir, '*.bad'))
+    bad.sort()
+    badNonce = str(random.random())
+    for input in bad:
+        t.test(4, './treeSort < {} > /dev/null 2> /dev/null || echo -n {}'.format(os.path.basename(input), badNonce), 
+               tester.Match(badNonce))
+
+    # valgrind tests
+    for input in ['123.in', 'deep.in', 'rand100.in', 'cow.bad', 'deepcow.bad']:
+        output = input.replace('.in', '.out')
+        t.test(4, 'valgrind -q ./treeSort < {} > /dev/null || true'.format(os.path.basename(input)), 
+               tester.Match(''))
+
+print(t.report())
