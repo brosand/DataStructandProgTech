@@ -6,16 +6,22 @@
 
 
 
-/*
- *Pseudocode
- * while input not eof
- *
- * if [ ->
- *  buildTree(t, readTree)
- *if ] -?
- * ret buildTree(t)
- * 
- */
+
+//TODO add input weird handling
+//TODO make realloc just double on overflow
+tree *treeTest() {
+    tree *t1 = buildTree();
+    tree *t2 = buildTree();
+    tree *tb = buildTree();
+    
+    tb->subTrees = malloc(sizeof(tree *) * 2);
+    tb->subTrees[0] = t1;
+    tb->subTrees[1] = t2;
+    tb->nodes = 2;
+    qSortTree(tb);
+    return tb;
+}
+
 tree *layerDown(tree *ct) {
    tree *nt = buildTree();
    nt->parent = ct;
@@ -35,10 +41,18 @@ tree *layerDown(tree *ct) {
 tree *layerUp(tree *t) {
     /* t->subTrees = malloc(sizeof(tree) * (t->size -1)); */
     if (t->parent == 0){return readTree(t);}
-    t->parent->size++;
-    t->parent->subTrees = realloc(t->parent->subTrees, sizeof(tree) * t->parent->size - 1);
-    /* printf("%d\n",t->parent->size); */
-    t->parent->subTrees[t->parent->size - 2] = t;
+    /* t->parent->size++; */
+    t->parent->nodes++;
+    /* if(!(t->parent->subTrees)){ */
+        /* t->parent->subTrees = malloc(t->parent->nodes * sizeof(tree *)); */
+    /* }else { */
+    if (t->parent->nodes >= t->parent->size){
+        t->parent->subTrees = realloc(t->parent->subTrees, sizeof(tree *) * t->parent->size * 2);
+        t->parent->size = 2 * t->parent->size;
+    }
+    /* printf("nodes %d\r",t->parent->size); */
+    /* printf("n %d\n", t->parent->nodes); */
+    t->parent->subTrees[t->parent->nodes - 1] = t;
     //TODO fix this problem
     return readTree(t->parent);
 }
@@ -72,7 +86,8 @@ tree *readTree(tree *ct) {
                 /* layer++; */
                 break;
             default:
-                return ct;
+                /* exit(1); */
+                return layerUp(ct);
  }
     }
     return ct;
@@ -80,7 +95,9 @@ tree *readTree(tree *ct) {
 
 tree *buildTree() {
    tree *t = malloc(sizeof(tree));
+   //TODO maybe problem with tsize ->3
    t->size = 1;
+   t->nodes = 0;
    t->subTrees = 0;
    /* t->head = NULL; */
    /* t->tail = NULL; */
@@ -90,70 +107,44 @@ tree *buildTree() {
 }
 
 int cmpTree(const void *t1, const void *t2) {
-    return(((tree *)t1)->size - ((tree *)t2)->size);
+    /* printf("87\n"); */
+    int l = (*((tree **)t1))->nodes;
+    int r = (*((tree **)t2))->nodes;
+    /* printf("l: %d, r: %d\n", l, r); */
+    return(r > l);
 }
 
 void qSortTree(tree *t) {
-    qsort(t->subTrees, t->size - 1, sizeof(tree), cmpTree);
-    for (int i = 0; i < t->size - 1; i++) {
+    assert(t);
+    /* printf("****\n"); */
+    /* printTree(t); */
+    /* printf("\n****"); */
+    
+    /* printf("91\n"); */
+    /* assert(t); */
+    if (t->nodes == 0) {return;}
+    /* printf("nodes: %d\n", t->nodes); */
+    /* printf("nodes123: %d, %d, %d\n", t->subTrees[0]->nodes, t->subTrees[1]->nodes, t->subTrees[2]->nodes); */
+    qsort(t->subTrees, t->nodes, sizeof(tree *), cmpTree);
+    for (int i = 0; i < t->nodes; i++) {
+        /* printf("%d\n",i); */
         qSortTree(t->subTrees[i]);
     }
 }
 
-/* tree *buildTree(int size, tree **subTrees) { */
-/*   tree *t = malloc(sizeof(tree)); */
-/*   /\* t->subTrees = calloc(sizeof(tree),size); *\/ */
-/*   t->subTrees = subTrees; */
-/*   t->size = size; */
-/*   /\* for (int i = 1; i < size; i++) { *\/ */
-/*       /\* tree *newT = buildTree(1); *\/ */
-/*       /\* t->subTrees[i] = newT; *\/ */
-/*       /\* } *\/ */
-/*   return t; */
-/* } */
-
-
-
-/* void sortTree(tree *t) { */
-/*     /\* assert(t->size != 0); *\/ */
-/*     if(t->size != 1) { */
-/*       for (int i = 0; i < t->size; i++) { */
-/*           int j = i; */
-/*           while(j > 0 && t->subTrees[j-1] < t->subTrees[j]) { */
-/*               tree *tmp = t->subTrees[j-1]; */
-/*               t->subTrees[j-1] = t->subTrees[j]; */
-/*               t->subTrees[j] = tmp; */
-/*               j--; */
-/*           } */
-/*       } */
-/*       for (int i = 0; i < t->size; i++) { */
-/*           sortTree(t->subTrees[i]); */
-/*       } */
-/*     } */
-/* } */
-
-
-
-/* void mergeSortTree(tree t) { */
-    /* tree *t1 = buildTree(t->size); */
-    /* tree *t2 = buildTree(t->size); */
-    
-/* } */
-
-
-
-
-
 void printTree(tree *t) {
   if (t == NULL) {
+      printf("109");
+      printf("PROABLEM");
       return;
   }
-  if (t->size == 1) {
+  if (t->nodes == 0) {
       printf("[]"); 
  } 
   else {
       putchar('[');
-      for (int i = 0; i < t->size-1; i++) {
+      /* printf("nodes: %d\n", t->nodes); */
+      for (int i = 0; i < t->nodes; i++) {
           printTree(t->subTrees[i]);
       }
       putchar(']');

@@ -5,6 +5,7 @@
 
 
 int main() {
+    /* tree *tt = treeTest(); */
     tree *t =readFirst();
     qSortTree(t);
     printTree(t);

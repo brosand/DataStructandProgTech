@@ -13,6 +13,7 @@
 
 struct Tree {
     int size;
+    int nodes;
     /* struct Tree *head; */
     /* struct Tree *tail; */
     /* struct Tree *next; */
