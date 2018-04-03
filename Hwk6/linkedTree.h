@@ -13,11 +13,10 @@
 
 struct Tree {
     int size;
-    /* struct Tree *head; */
-    /* struct Tree *tail; */
-    /* struct Tree *next; */
+    struct Tree *head;
+    struct Tree *tail;
+    struct Tree *next;
     struct Tree *parent;
-    struct Tree **subTrees;
 };
 
 typedef struct Tree tree;
@@ -29,13 +28,11 @@ tree *layerUp(tree *t);
 
 tree *readTree(tree *ct);
 
-int cmpTree(const void *t1, const void *t2);
-
 tree *readFirst();
 
 tree *buildTree();
 
-void qSortTree(tree *t);
+void sortTree(tree *t);
 
 void printTree(tree *t);
 
