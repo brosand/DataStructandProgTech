@@ -23,6 +23,7 @@ struct Tree {
 
 typedef struct Tree tree;
 
+tree *treeExit(tree *ct);
 
 tree *layerDown(tree *ct);
 

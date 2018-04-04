@@ -23,80 +23,77 @@ tree *treeTest() {
 }
 
 tree *layerDown(tree *ct) {
-   tree *nt = buildTree();
-   nt->parent = ct;
-   /* if(ct->head == NULL){ */
-       /* ct->head = nt; */
-       /* ct->tail = nt; */
-   /* } */
-   /* else{ */
-      /* ct->tail->next = nt; */
-      /* ct->tail = nt; */
-      
-   /* } */
-   /* ct->size++; */
-   return readTree(nt);
+  //Moved the buildTree into here to reduce stack usage
+   tree *t = malloc(sizeof(tree));
+   t->size = 1;
+   t->nodes = 0;
+   t->subTrees = 0;
+   t->parent = ct;
+   ct->nodes++;
+   if(ct->size == 0){ct->size++;}
+   if (ct->nodes >= ct->size){
+        ct->subTrees = realloc(ct->subTrees, sizeof(tree *) * ct->size * 2);
+        ct->size = 2 * ct->size;
+    }
+   
+   ct->subTrees[ct->nodes - 1] = t;
+   return readTree(t);
 }
 
 tree *layerUp(tree *t) {
-    /* t->subTrees = malloc(sizeof(tree) * (t->size -1)); */
-    if (t->parent == 0){return readTree(t);}
+    if (t->parent == 0){return (t);}
+    /* if (t->parent->size == 0){ */
     /* t->parent->size++; */
-    t->parent->nodes++;
-    /* if(!(t->parent->subTrees)){ */
-        /* t->parent->subTrees = malloc(t->parent->nodes * sizeof(tree *)); */
-    /* }else { */
-    if (t->parent->nodes >= t->parent->size){
-        t->parent->subTrees = realloc(t->parent->subTrees, sizeof(tree *) * t->parent->size * 2);
-        t->parent->size = 2 * t->parent->size;
-    }
-    /* printf("nodes %d\r",t->parent->size); */
-    /* printf("n %d\n", t->parent->nodes); */
-    t->parent->subTrees[t->parent->nodes - 1] = t;
-    //TODO fix this problem
+    /* } */
+
+    
     return readTree(t->parent);
 }
 
 tree *readFirst() {
     int input = getchar();
-    /* int layer = 0; */
     tree *ct = buildTree();
     assert(input == '[');
-    /* input = getchar(); */
     return readTree(ct);
 }
 
 tree *readTree(tree *ct) {
     int input = getchar();
-    /* putchar(input); */
-    /* putchar(input); */
-    /* int layer = 0; */
-    /* tree *ct = buildTree(); */
-    /* assert(input == '['); */
-    /* input = getchar(); */
     while (input != EOF) {
         switch (input){
             case '[':
-                /* tree *t = buildTree(); */
                 return layerDown(ct);
-                /* layer--; */
                 break;
             case ']':
                 return layerUp(ct);
-                /* layer++; */
                 break;
             default:
+                /* return (layerUp(ct)); */
+                
                 /* exit(1); */
-                return layerUp(ct);
+                if (ct->parent == 0 && ct->size > 0) {return ct;}
+                /* return layerUp(ct); */
+                return treeExit(ct);
+                
  }
     }
+    /* if (ct->parent == 0) {return treeExit(ct);}; */
     return ct;
+}
+
+tree *treeExit(tree *ct) {
+    while(ct->parent != 0) {
+        ct = layerUp(ct);
+        }
+    deleteTree(ct);
+    /* } */
+    exit(1);
 }
 
 tree *buildTree() {
    tree *t = malloc(sizeof(tree));
    //TODO maybe problem with tsize ->3
-   t->size = 1;
+   t->size = 0;
    t->nodes = 0;
    t->subTrees = 0;
    t->parent = 0;
