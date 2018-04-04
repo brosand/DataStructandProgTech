@@ -10,7 +10,9 @@ tree *uglyIteration(){
   //Had a pretty recursive version but found out tail recursion is bad in C
   int input = getchar();
   tree *ct = buildTree();
-  assert(input == '[');
+  /* assert(input == '['); */
+  if(input != '[') {exit(1);}
+ 
   READTREE: ;
   
   input = getchar();
