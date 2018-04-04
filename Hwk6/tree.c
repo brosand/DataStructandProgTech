@@ -6,163 +6,125 @@
 
 
 
+tree *uglyIteration(){
+  //Had a pretty recursive version but found out tail recursion is bad in C
+  int input = getchar();
+  tree *ct = buildTree();
+  assert(input == '[');
+  READTREE: ;
+  
+  input = getchar();
+  while(input != EOF){
 
-//TODO add input weird handling
-//TODO make realloc just double on overflow
-tree *treeTest() {
-    tree *t1 = buildTree();
-    tree *t2 = buildTree();
-    tree *tb = buildTree();
-    
-    tb->subTrees = malloc(sizeof(tree *) * 2);
-    tb->subTrees[0] = t1;
-    tb->subTrees[1] = t2;
-    tb->nodes = 2;
-    qSortTree(tb);
-    return tb;
-}
+    switch (input){
 
-tree *layerDown(tree *ct) {
-  //Moved the buildTree into here to reduce stack usage
-   tree *t = malloc(sizeof(tree));
-   t->size = 1;
-   t->nodes = 0;
-   t->subTrees = 0;
-   t->parent = ct;
-   ct->nodes++;
-   if(ct->size == 0){ct->size++;}
-   if (ct->nodes >= ct->size){
-        ct->subTrees = realloc(ct->subTrees, sizeof(tree *) * ct->size * 2);
-        ct->size = 2 * ct->size;
-    }
-   
-   ct->subTrees[ct->nodes - 1] = t;
-   return readTree(t);
-}
+      case '[': ;
 
-tree *layerUp(tree *t) {
-    if (t->parent == 0){return (t);}
-    /* if (t->parent->size == 0){ */
-    /* t->parent->size++; */
-    /* } */
+        tree *t = buildTree();
+        t->parent = ct;
+        t->size = 1;
+        ct->nodes++;
 
-    
-    return readTree(t->parent);
-}
+        if(ct->size == 0){ct->size++;}
 
-tree *readFirst() {
-    int input = getchar();
-    tree *ct = buildTree();
-    assert(input == '[');
-    return readTree(ct);
-}
-
-tree *readTree(tree *ct) {
-    int input = getchar();
-    while (input != EOF) {
-        switch (input){
-            case '[':
-                return layerDown(ct);
-                break;
-            case ']':
-                return layerUp(ct);
-                break;
-            default:
-                /* return (layerUp(ct)); */
-                
-                /* exit(1); */
-                if (ct->parent == 0 && ct->size > 0) {return ct;}
-                /* return layerUp(ct); */
-                return treeExit(ct);
-                
- }
-    }
-    /* if (ct->parent == 0) {return treeExit(ct);}; */
-    return ct;
-}
-
-tree *treeExit(tree *ct) {
-    while(ct->parent != 0) {
-        ct = layerUp(ct);
+        if (ct->nodes >= ct->size){
+          ct->subTrees = realloc(ct->subTrees, sizeof(tree *) * ct->size * 2);
+          ct->size = 2 * ct->size;
         }
-    deleteTree(ct);
-    /* } */
-    exit(1);
+
+        ct->subTrees[ct->nodes - 1] = t;
+        ct = t;
+
+      goto READTREE;
+      break;
+
+      case ']':
+
+        if (ct->parent == 0){goto END;}
+
+        ct->parent->tSize += ct->tSize;
+        ct = ct->parent;
+
+        goto READTREE;
+      break;
+
+      default:
+
+        EXITTREE:
+
+        while(ct->parent != 0) {
+          ct->parent->tSize += ct->size;
+          ct = ct->parent;
+        }
+
+        deleteTree(ct);
+        exit(1);
+        
+    }
+  }
+
+  END:
+
+  if (ct->parent != 0){goto EXITTREE;}
+  return ct;
+
+  
 }
 
 tree *buildTree() {
-   tree *t = malloc(sizeof(tree));
-   //TODO maybe problem with tsize ->3
-   t->size = 0;
-   t->nodes = 0;
-   t->subTrees = 0;
-   t->parent = 0;
-   return t;
+ tree *t = malloc(sizeof(tree));
+
+ t->size = 0;
+ t->nodes = 0;
+ t->subTrees = 0;
+ t->parent = 0;
+ t->tSize = 1;
+
+ return t;
 }
 
 int cmpTree(const void *t1, const void *t2) {
-    /* printf("87\n"); */
-    int l = (*((tree **)t1))->nodes;
-    int r = (*((tree **)t2))->nodes;
-    /* printf("l: %d, r: %d\n", l, r); */
-    return(r > l);
+  int l = (*((tree **)t1))->tSize;
+  int r = (*((tree **)t2))->tSize;
+
+  return(r > l);
 }
 
 void qSortTree(tree *t) {
-    assert(t);
-    /* printf("Tree before:%p \n", t); */
-    /* printTree(t); */
-    /* printf("\n***"); */
-    
-    /* printf("91\n"); */
-    /* assert(t); */
-    if (t->nodes == 0) {return;}
-    /* printf("nodes: %d\n", t->nodes); */
-    /* printf("nodes123: %d, %d, %d\n", t->subTrees[0]->nodes, t->subTrees[1]->nodes, t->subTrees[2]->nodes); */
-    qsort(t->subTrees, t->nodes, sizeof(tree *), cmpTree);
-    for (int i = 0; i < t->nodes; i++) {
-        /* printf("%d\n",i); */
-        qSortTree(t->subTrees[i]);
-    }
-    /* printf("Tree after:%p \n", t); */
-    /* printTree(t); */
-    /* printf("\n***"); */
+  assert(t);
+  qsort(t->subTrees, t->nodes, sizeof(tree *), cmpTree);
+
+  for (int i = 0; i < t->nodes; i++) {
+    qSortTree(t->subTrees[i]);
+  }
 }
 
 void printTree(tree *t) {
-  if (t == NULL) {
-      printf("109");
-      printf("PROABLEM");
-      return;
+  assert(t);
+
+    putchar('[');
+
+    for (int i = 0; i < t->nodes; i++) {
+      printTree(t->subTrees[i]);
+    }
+
+    putchar(']');
+
   }
-  /* if (t->nodes == 0) { */
-      /* printf("[]");  */
- /* }  */
-  else {
-      putchar('[');
-      /* printf("nodes: %d\n", t->nodes); */
-      /* if(t->nodes != 0) { */
-          for (int i = 0; i < t->nodes; i++) {
-              printTree(t->subTrees[i]);
-          }
-      /* } */
-      putchar(']');
-  }
-}
 
 void deleteTree(tree *t) {
-    assert(t);
-    /* printf("numNodes \n") */
-    if (t->nodes == 0) {
-        free(t);
+  assert(t);
+
+  if (t->nodes == 0) {
+    free(t);
+  }
+
+  else {
+    for (int i = 0; i < t->nodes; i++) {
+      deleteTree(t->subTrees[i]);
     }
-    else {
-        for (int i = 0; i < t->nodes; i++) {
-            deleteTree(t->subTrees[i]);
-            /* free(t->subTrees); */
-            /* free(t); */
-        }
-        free(t->subTrees);
-        free(t);
-    }
+    
+    free(t->subTrees);
+    free(t);
+  }
 }

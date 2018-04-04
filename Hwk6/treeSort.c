@@ -6,7 +6,7 @@
 
 int main() {
     /* tree *tt = treeTest(); */
-    tree *t =readFirst();
+    tree *t =uglyIteration();
     qSortTree(t);
     printTree(t);
     deleteTree(t);

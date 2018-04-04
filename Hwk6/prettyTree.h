@@ -24,18 +24,17 @@ struct Tree {
 
 typedef struct Tree tree;
 
-/* tree *treeExit(tree *ct); */
+tree *treeExit(tree *ct);
 
-/* tree *layerDown(tree *ct); */
+tree *layerDown(tree *ct);
 
-/* tree *layerUp(tree *t); */
+tree *layerUp(tree *t);
 
-/* tree *readTree(tree *ct); */
+tree *readTree(tree *ct);
 
 int cmpTree(const void *t1, const void *t2);
 
-/* tree *readFirst(); */
-tree *uglyIteration();
+tree *readFirst();
 
 tree *buildTree();
 
