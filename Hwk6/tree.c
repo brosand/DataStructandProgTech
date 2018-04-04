@@ -99,9 +99,6 @@ tree *buildTree() {
    t->size = 1;
    t->nodes = 0;
    t->subTrees = 0;
-   /* t->head = NULL; */
-   /* t->tail = NULL; */
-   /* t->next = NULL; */
    t->parent = 0;
    return t;
 }
@@ -116,9 +113,9 @@ int cmpTree(const void *t1, const void *t2) {
 
 void qSortTree(tree *t) {
     assert(t);
-    /* printf("****\n"); */
-    /* printTree(t); */
-    /* printf("\n****"); */
+    printf("Tree before:%p \n", t);
+    printTree(t);
+    printf("\n***");
     
     /* printf("91\n"); */
     /* assert(t); */
@@ -130,6 +127,9 @@ void qSortTree(tree *t) {
         /* printf("%d\n",i); */
         qSortTree(t->subTrees[i]);
     }
+    printf("Tree after:%p \n", t);
+    printTree(t);
+    printf("\n***");
 }
 
 void printTree(tree *t) {
@@ -149,4 +149,21 @@ void printTree(tree *t) {
       }
       putchar(']');
   }
+}
+
+void deleteTree(tree *t) {
+    assert(t);
+    /* printf("numNodes \n") */
+    if (t->nodes == 0) {
+        free(t);
+    }
+    else {
+        for (int i = 0; i < t->nodes; i++) {
+            deleteTree(t->subTrees[i]);
+            /* free(t->subTrees); */
+            /* free(t); */
+        }
+        free(t->subTrees);
+        free(t);
+    }
 }

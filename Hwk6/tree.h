@@ -40,4 +40,6 @@ void qSortTree(tree *t);
 
 void printTree(tree *t);
 
+void deleteTree(tree *t);
+
 #endif // __TREE_H_
