@@ -113,9 +113,9 @@ int cmpTree(const void *t1, const void *t2) {
 
 void qSortTree(tree *t) {
     assert(t);
-    printf("Tree before:%p \n", t);
-    printTree(t);
-    printf("\n***");
+    /* printf("Tree before:%p \n", t); */
+    /* printTree(t); */
+    /* printf("\n***"); */
     
     /* printf("91\n"); */
     /* assert(t); */
@@ -127,9 +127,9 @@ void qSortTree(tree *t) {
         /* printf("%d\n",i); */
         qSortTree(t->subTrees[i]);
     }
-    printf("Tree after:%p \n", t);
-    printTree(t);
-    printf("\n***");
+    /* printf("Tree after:%p \n", t); */
+    /* printTree(t); */
+    /* printf("\n***"); */
 }
 
 void printTree(tree *t) {
@@ -138,15 +138,17 @@ void printTree(tree *t) {
       printf("PROABLEM");
       return;
   }
-  if (t->nodes == 0) {
-      printf("[]"); 
- } 
+  /* if (t->nodes == 0) { */
+      /* printf("[]");  */
+ /* }  */
   else {
       putchar('[');
       /* printf("nodes: %d\n", t->nodes); */
-      for (int i = 0; i < t->nodes; i++) {
-          printTree(t->subTrees[i]);
-      }
+      /* if(t->nodes != 0) { */
+          for (int i = 0; i < t->nodes; i++) {
+              printTree(t->subTrees[i]);
+          }
+      /* } */
       putchar(']');
   }
 }
