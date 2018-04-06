@@ -1,0 +1,57 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+
+inputDir = '/c/cs223/Hwk7/testFiles'
+
+if not os.path.exists(inputDir):
+    inputDir = 'testFiles' 
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-04-12 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copy('array.c')
+except:
+    t.testFail(100, "array.c does not exist")
+    print(t.report())
+    sys.exit(0)
+
+t.copyDirFollowLinks(inputDir)
+
+t.log("# test sample inputs and outputs")
+
+# 10 pts if array.c exists
+t.testOK(10, "array.c exists")
+
+# 10 pts if array.c compiles with all flags
+t.test(10, "gcc -std=c99 -g3 -O2 -Wall -pedantic -o testArray testArray.c array.c", tester.Match(b''), 20)
+
+# 10 pts if array.c compiles at all
+if t.test(10, "gcc -std=c99 -g3 -O2 -o testArray testArray.c array.c || echo compile failed", 
+          lambda s: s.find(b'compile failed') < 0, 20) == 0:
+    # can't compile
+    t.testFail(70, 'Compile failed, skipping remaining tests')
+else:
+    # sample inputs and outputs
+    # 10 points for each test
+    t.log('# match sample inputs with sample outputs')
+    inputs = glob.glob(os.path.join(inputDir, '*.in'))
+    inputs.sort()
+    for input in inputs:
+        output = input.replace('.in', '.out')
+        t.copy(input)
+        t.test(5, './testArray < {}'.format(os.path.basename(input)), 
+               tester.Match(open(output, "rb").read()))
+
+    # valgrind
+    for i in ("t1000.in", "r1000.in", "outOfRange.in"):
+        t.log("# valgrind test on {}".format(i))
+        t.test(5, "exec valgrind -q --partial-loads-ok=yes --leak-check=yes ./testArray < {} > /dev/null".format(i),
+            tester.Match(b''),
+            30)
+
+print(t.report())

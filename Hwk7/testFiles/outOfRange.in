@@ -1,0 +1,5 @@
+# check setting values out of range
+1 100 P
+s -12 3 P
+s 100 3 P
+s 50 3 P
