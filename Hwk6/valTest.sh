@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-FILES="/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk6/testFiles/*.in"
+FILES="/home/accts/br384/cs223/Hwk6/testFiles/*.in"
 for f in $FILES
 do
 echo "Processing $f file..."
