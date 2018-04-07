@@ -1,29 +1,14 @@
-#ifndef _ARRAY_H
-#define _ARRAY_H
+#include "array.h"
 
-// Abstract array data type that allows quick computation of an
-// aggregate over a prefix of the array.
-//
-// The array is provided with a combine function for combining
-// values.  This should represent some associative binary operation on ints.
-//
-// The arrayCombine function returns the result of aggregating
-// the first k values in the array in order using combine.
-
-#include <stdlib.h>
-
-
-struct {
-   int *items;
-   int (*combine)(int, int);
-} array;
-
-typedef struct array Array;
 
 // Create a new array holding n values, all initially 0.
 // Behavior is undefined if n == 0.
 // Cost: O(n).
-Array *arrayCreate(int (*combine)(int, int), size_t n);
+Array *arrayCreate(int (combine)(int, int), size_t n){
+    Array *a = calloc(n, sizeof(int));
+    /* a->combine = combine; */
+    return a;
+}
 
 // Free all space used by an array.
 // Cost: O(n).
@@ -48,5 +33,3 @@ void arraySet(Array *, size_t i, int v);
 // If k is zero or greater than size, returns combination of all elements.
 // Cost: O(log n).
 int arrayCombine(const Array *, size_t k);
-
-#endif
