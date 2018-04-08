@@ -13,10 +13,11 @@
 #include <stdlib.h>
 
 
-struct {
-   int *items;
-   int (*combine)(int, int);
-} array;
+struct array{
+    int size;
+    int *items;
+    int (*combine)(int, int);
+};
 
 typedef struct array Array;
 
