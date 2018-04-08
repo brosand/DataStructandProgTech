@@ -8,7 +8,8 @@
 // Behavior is undefined if n == 0.
 // Cost: O(n).
 Array *arrayCreate(int (combine)(int, int), size_t n){
-    Array *a = calloc(n, sizeof(int));
+Array *a = malloc(sizeof(Array));
+a->items = calloc(n, sizeof(int));
     a->size = n;
     a->combine = combine;
     return a;
