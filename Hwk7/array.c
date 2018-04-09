@@ -1,8 +1,12 @@
-
 #include <stdlib.h>
 #include <assert.h>
 #include "array.h"
-#define DIV (1)
+
+#define NUM_CHILDREN (2)
+ 
+#define LEFT (0)
+#define RIGHT (2)
+
 
 // Create a new array holding n values, all initially 0.
 // Behavior is undefined if n == 0.
@@ -13,8 +17,8 @@ struct array {
     size_t size;
     int index;
     int aggregate;
-    struct node *left;
-    struct node *right;
+    int heapKey;
+    struct array *child[NUM_CHILDREN];
     
 };
 /* typedef struct array Array; */
