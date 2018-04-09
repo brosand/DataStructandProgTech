@@ -19,7 +19,7 @@ sum1(int x, int y)
 
 // unpack a function from n elements to n elements encoded as a non-negative int
 static void
-unpackFunction(int n, int x, int a[])
+unpackFunction(int n, nt x, int a[])
 {
     assert(x >= 0);
     assert(n > 0);
