@@ -1,4 +1,4 @@
-#include <stdio.h>
+
 #include <stdlib.h>
 #include <assert.h>
 #include "array.h"
@@ -18,58 +18,24 @@ struct array {
     struct array *right;
     
 };
-Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k);
+/* typedef struct array Array; */
 
 Array *arrayCreate(int (*combine)(int, int), size_t n){
-
     Array *a = malloc(sizeof(Array));
-
     a->size = n;
-    a->index = n/2;
-    int l = 0;
-    if (n%2 != 0){l = 1;}
-    
-    if(n == 1){
-        a->left = a->right = 0;
-        return a;
+    a->index = 0;
+    for (int i = 0; i < n; i++) {
+        arraySet(a, i, 0);
     }
-    
-    a->left = arrayCreateR(combine, n/2, 0);
-    a->right = arrayCreateR(combine, n/2 + l, n/2);
-
+     /* a->items = calloc(n, si */
     return a;
-
-}
-
-Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k){
-    assert(n!=0);
-    Array *a = malloc(sizeof(Array));
-    int l = 0;
-    if (n%2 != 0){l = 1;}
-    a->size = n;
-    a->index = k;
-    a->value = k;
-    a->aggregate = 0;
-    
-    if(n == 1){
-    /* printf("deep: %zu\n",k); */
-        a->left = a->right = 0;
-        return a;
-    }
-    /* printf("index: %zu, size: %zu \n containing\n",k,n); */
-    a->left = arrayCreateR(combine, n/2, a->index);
-    a->right = arrayCreateR(combine, n/2 + l, a->index + n/2);
-    //TODO what about odd?
-    return a;
-
-    
 }
 
 // Free all space used by an array.
 // Cost: O(n).
 void arrayDestroy(Array *a) {
-    if(a->left!=0){arrayDestroy(a->left);}
-    if(a->right!=0){arrayDestroy(a->right);}
+    if(a->left){arrayDestroy(a->left);}
+    if(a->right){arrayDestroy(a->right);}
     free(a);
 }
 
@@ -83,24 +49,19 @@ size_t arraySize(const Array *a) {
 // or 0 if i is out of range.
 // Cost: O(log n).
 int arrayGet(const Array *a, size_t i) {
-    if (a->size == 1){return a->value;}
-    /* printf("found index: %d, looking for: %zu\n", a->index, i); */
+    /* if (a->size == 1){return a->value;} */
     assert(a);
-    if (a->index == i){
-        return a->value;
-    }
-    else if (a->right->index > i){
-        if(a->left){
-            return arrayGet(a->left, i);
+    if (a->index == i){return a->value;}
+    else if (a->index > i){
+        if(a->right){
+            return arrayGet(a->right, i);
         }
-        assert(0);
-        return 1;
      }
-     /* else if (a->index < i){ */
-
-    else {/* assert(a->right); */
+     else {
+         assert(a->right);
         return arrayGet(a->right, i);
      }
+    return 0;
 }
     
 
@@ -109,7 +70,7 @@ int arrayGet(const Array *a, size_t i) {
 // No effect if i is out of range.
 // Cost: O(log n).
 void arraySet(Array *a, size_t i, int v){
-   /* return;  */
+    
     Array *newNode;
     
     newNode = malloc(sizeof(Array));
@@ -120,7 +81,7 @@ void arraySet(Array *a, size_t i, int v){
     newNode->right = 0;
     newNode->aggregate = 0;
     
-    /* tempNode; */
+    tempNode;
     
     //Only run on root node, so we go down a depth of the size? what's the actual depth
     for(int i = 0; i < a->size; i++) {
@@ -129,24 +90,21 @@ void arraySet(Array *a, size_t i, int v){
                 a = a->left;
                 
             } else {
-                a->left = newNode;
-                /* a->left = tempNode; */
-                /* a = tempNode */
+                a->left = tempNode;
+                a = tempNode
             }
         } else {
             if(a->right) {
                 a = a->right;
             } else {
-                a->right = newNode;
-                /* a->right = tempNode; */
-                /* a = tempNode; */
+                a->right = tempNode;
+                a = tempNode;
             }
         }
         
     }
     
-   if(a->right->index == i){a->right->value = v;}
-   else if(a->left->index == i) {a->left->value = v;}
+   if(a->right->index = i) {} 
     
 }
 

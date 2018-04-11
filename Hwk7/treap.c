@@ -1,226 +1,175 @@
-#include "treap.h"
-
-#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <time.h>
-#include <limits.h>
+#include <stdio.h>
+#include "array.h"
 
 #define NUM_CHILDREN (2)
-
+ 
 #define LEFT (0)
 #define RIGHT (1)
 
-// Invariants: 
-// - Every key below child[LEFT] < key < every key below child[RIGHT]
-// - Every heapKey in both subtreaps < heapKey.
-// heapKeys are chosen randomly to ensure balance with high probability.
-struct treap {
-    int key;
+
+// Create a new array holding n values, all initially 0.
+// Behavior is undefined if n == 0.
+// Cost: O(n).
+
+
+struct array {
+    size_t size;
+    size_t index;
+    int agg;
+    int value;
     int heapKey;
-    struct treap *child[NUM_CHILDREN];
+    int (*combine)(int, int);
+    struct array **child;
+    
 };
+/* typedef struct array Array; */
 
-void
-treapDestroy(struct treap **t)
-{
-    if(*t) {
-        for(int dir = LEFT; dir <= RIGHT; dir++) {
-            treapDestroy(&(*t)->child[dir]);
+
+void arrayDestroy(Array *a) {
+    /* printf("HI\n"); */
+    if(a!=0) {
+        for (int i = LEFT; i <= RIGHT; i++) {
+            arrayDestroy((a)->child[i]);
         }
+    
+    free(a);
+    a = 0;
     }
-
-    free(*t);
-    *t = 0;
 }
 
-void
-treapPrintHelper(const struct treap *t, int depth)
-{
-    if(t == 0) {
-        return;
-    }
 
-    treapPrintHelper(t->child[LEFT], depth+1);
-
-    // print indented root
-    for(int i = 0; i < depth; i++) {
-        putchar(' ');
-    }
-
-    printf("%d [%d]\n", t->key, t->heapKey);
-
-    treapPrintHelper(t->child[RIGHT], depth+1);
+// Free all space used by an array.
+// Cost: O(n).
+// Return the number of elements of an array.
+// Cost: O(1).
+size_t arraySize(const Array *a) {
+    return a->size;
 }
 
-void
-treapPrint(const struct treap *t)
-{
-    treapPrintHelper(t, 0);
-}
-
-// return 1 if it finds key, 0 otherwise
-int
-treapSearch(const struct treap *t, int key)
-{
-    if(t == 0) {
-        // no key!
+// Return the i-th element of an array
+// or 0 if i is out of range.
+// Cost: O(log n).
+int arrayGet(const Array *a, size_t i) {
+    /* printf("67"); */
+    /* printf("%zu\n",i); */
+    if (a==0){
+        printf("68");
         return 0;
-    } else if(key == t->key) {
-        // found it
-        return 1;
-    } else if(key < t->key) {
-        // look in left
-        return treapSearch(t->child[LEFT], key);
+    }
+    else if(i == a->index) {
+        /* printf("HI"); */
+        return a->value;
+    }
+    else if(i < a->index) {
+        /* printf("77"); */
+    /* printf("%d\n",a->index); */
+        return arrayGet(a->child[LEFT], i);
     } else {
-        // look in right
-        return treapSearch(t->child[RIGHT], key);
+        /* printf("80"); */
+    /* printf("**%zu**\n",a->index); */
+        return arrayGet(a->child[RIGHT], i);
     }
 }
-
-// return largest element <= key
-// or INT_MIN if there is no such element.
-int
-treapSearchMaxLE(const struct treap *t, int key)
-{
-    if(t == 0) {
-        // no key!
-        return INT_MIN;
-    } else if(key == t->key) {
-        // found it
-        return key;
-    } else if(key < t->key) {
-        // look in left
-        return treapSearchMaxLE(t->child[LEFT], key);
-    } else {
-        // look in right
-        int result = treapSearchMaxLE(t->child[RIGHT], key);
-
-        if(result == INT_MIN) {
-            // didn't find it
-            return t->key;
-        } else {
-            return result;
+int fixAgg(Array *);
+int fixAgg(Array *a){
+    if(a->child[LEFT] == 0){
+        if(a->child[RIGHT]==0) {
+            return(a->value);
+        }
+        else{
+            return a->combine(a->child[RIGHT]->agg, v);
         }
     }
+    else if(a->child[RIGHT] == 0){
+        return a->combine(v, a->child[LEFT]->agg, v)
+    }
+    return()
+}
+void treapRotate(Array **a, size_t i) {
+    
+    assert(a);
+    Array *ch = *a;
+    assert(ch);
+    Array *gr = ch->child[i];
+    assert(gr);
+    Array *mSub = gr->child[!i];
+    
+    *a = gr;
+    gr->child[!i] = ch;
+    ch->child[i] = mSub;
+    /* gr->agg = fixAgg(ch); */
+    /* ch->agg = fixAgg(gr); */
 }
 
-// rotate the treap pointed to by parent
-// so that child in direction moves up
-void
-treapRotateUp(struct treap **parent, int dir)
-{
-    // get pointers to anything that might move
-    assert(parent);
-    struct treap *child = *parent;
-    assert(child);
-    struct treap *grandchild = child->child[dir];
-    assert(grandchild);
-    struct treap *middleSubtreap = grandchild->child[!dir];
+// Set the i-th element of an array to v.
+// No effect if i is out of range.
+// Cost: O(log n).
 
-    // do the move
-    *parent = grandchild;
-    grandchild->child[!dir] = child;
-    child->child[dir] = middleSubtreap;
-}
-
-
-// insert key into treap pointed to by parent
-// if not already present
-void
-treapInsert(struct treap **parent, int key)
-{
-    if(*parent == 0) {
-        // no key!
-        *parent = malloc(sizeof(struct treap));
-        (*parent)->key = key;
-        (*parent)->heapKey = rand();
-        (*parent)->child[LEFT] = (*parent)->child[RIGHT] = 0;
-    } else if(key == (*parent)->key) {
-        // found it
+void arraySetR(Array **a, size_t i, int v){
+    /* printf("i val: %zu\n", i); */
+    /* assert(a); */
+    /* assert(i < a->) */
+    if(*a == 0) {
+       /* if(a == null || a ==) { */
+        *a = malloc(sizeof(Array));
+        (*a)->index = i;
+        (*a)->heapKey = rand();
+        (*a)->value = v;
+        (*a)->agg = v;
+        //rand decl
+         
+        (*a)->child = calloc(sizeof(Array*), NUM_CHILDREN);
+        (*a)->child[LEFT] = (*a)->child[RIGHT] = 0;
+    } else if (i == (*a)->index) {
+        (*a)->value = v;
         return;
-    } else if(key < (*parent)->key) {
-        // look in left
-        treapInsert(&(*parent)->child[LEFT], key);
+        //is this sufficient
+    } else if (i < (*a)->index) {
+        arraySetR(&(*a)->child[LEFT], i, v);
     } else {
-        // look in right
-        treapInsert(&(*parent)->child[RIGHT], key);
+        arraySetR(&(*a)->child[RIGHT], i, v);
     }
-
-    // check heap property
-    for(int dir = LEFT; dir <= RIGHT; dir++) {
-        if((*parent)->child[dir] != 0 && (*parent)->child[dir]->heapKey > (*parent)->heapKey) {
-            treapRotateUp(parent, dir);
+   //TODO THIS RUNS EVERY TIME RN 
+    for(int d = LEFT; d <= RIGHT; d++) {
+        if((*a)->child[d] != 0 && (*a)->child[d]->heapKey > (*a)->heapKey) {
+            treapRotate(a, d);
         }
     }
+}   
+void arraySet(Array *a, size_t i, int v){
+    arraySetR(&a, i, v);
 }
-
-// delete a node from a treap (if present)
-void
-treapDelete(struct treap **parent, int key)
-{
-    // first we look for it
-    if(*parent == 0) {
-        // not there
-        return;
-    } else if(key == (*parent)->key) {
-        // got it; rotate down until we have a missing kid
-        for(;;) {
-            // do we have a missing child?
-            for(int dir = LEFT; dir <= RIGHT; dir++) {
-                if((*parent)->child[dir] == 0) {
-                    // yes; free this node and promote other kid
-                    struct treap *toDelete = *parent;
-                    *parent = toDelete->child[!dir];
-                    free(toDelete);
-                    return;
-                }
-            }
-
-            // no missing child, have to rotate down
-            int biggerKid;
-            if((*parent)->child[LEFT]->heapKey > (*parent)->child[RIGHT]->heapKey) {
-                biggerKid = LEFT;
-            } else {
-                biggerKid = RIGHT;
-            }
-
-            // rotate up the bigger kid
-            treapRotateUp(parent, biggerKid);
-
-            // node to delete is now on opposite side
-            parent = &(*parent)->child[!biggerKid];
-        }
-    } else {
-        treapDelete(&(*parent)->child[key < (*parent)->key ? LEFT : RIGHT], key);
-    }
+// Return the result of aggregating the first k elements
+// of an array in order using the combine function.
+// If k is zero or greater than size, returns combination of all elements.
+// Cost: O(log n).
+int arrayCombine(const Array *a, size_t k) {
+   /* return arrayGet(a, k)->aggregate;  */
+   return 1; 
+    /* for (int i = 0; i < k; i++) { */
+        /* agg = a->combine(agg, arrayGet(a, i)); */
+    /* } */
+    
+    /* return agg; */
+    
 }
-
-#define TEST_THRESHOLD (10)
-
-int
-main(int argc, char **argv)
-{
-    if(argc != 1) {
-        fprintf(stderr, "Usage: %s\n", argv[0]);
-        return 1;
+Array *arrayCreate(int (*combine)(int, int), size_t n){
+    /* Array *a = malloc(sizeof(Array)); */
+    /* a->size = n; */
+    /* a->index = 0; */
+    /* a->child = malloc(sizeof(child)); */
+    /* a->child = calloc(sizeof(Array*), NUM_CHILDREN); */
+    /* a->child[LEFT] = a->child[RIGHT] = 0; */
+    Array *a = 0;
+    /* printf("%zu\n",n); */
+    for (int i = 0; i < n; i++) {
+        /* printf("38"); */
+        arraySetR(&a, i, 0);
+        
     }
-
-    struct treap *t = 0;
-    int key;
-
-    while(scanf("%d", &key) == 1) {
-        if(key >= 0) {
-            treapInsert(&t, key);
-        } else {
-            treapDelete(&t, -key);
-        }
-
-        treapPrint(t);
-        printf("--- largest <= %d is %d\n", TEST_THRESHOLD, treapSearchMaxLE(t, TEST_THRESHOLD));
-    }
-
-    treapDestroy(&t);
-
-    return 0;
+    a->size = n;
+    a->combine = combine;
+    return a;
 }
