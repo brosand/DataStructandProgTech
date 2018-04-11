@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "array.h"
+#define DIV (1)
 
 // Create a new array holding n values, all initially 0.
 // Behavior is undefined if n == 0.
@@ -13,7 +14,6 @@ struct array {
     int aggregate;
     int index;
     int value;
-    int (*combine)(int, int);
     struct array *left;
     struct array *right;
     
@@ -26,7 +26,6 @@ Array *arrayCreate(int (*combine)(int, int), size_t n){
 
     a->size = n;
     a->index = n/2;
-    a->combine = combine;
     int l = 0;
     if (n%2 != 0){l = 1;}
     
@@ -51,7 +50,6 @@ Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k){
     a->index = k;
     a->value = 0;
     a->aggregate = 0;
-    a->combine = combine;
     
     if(n == 1){
     /* printf("deep: %zu\n",k); */
@@ -84,9 +82,7 @@ size_t arraySize(const Array *a) {
 // Return the i-th element of an array
 // or 0 if i is out of range.
 // Cost: O(log n).
-// int arrayPull(Array *a, size_t i) {
-   
-// }
+
 int arrayGet(const Array *a, size_t i) {
     if (a->index == i){return a->value;}
     /* printf("found index: %d, looking for: %zu\n", a->index, i); */
@@ -96,50 +92,44 @@ int arrayGet(const Array *a, size_t i) {
             return arrayGet(a->left, i);
         }
         assert(0);
+        return 1;
      }
-     /* else if (a->index < i){ */
 
     else {/* assert(a->right); */
         return arrayGet(a->right, i);
-        
-    }
-
-}
+     }
     
+     
+}
+
+
 // Set the i-th element of an array to v.
 // No effect if i is out of range.
 // Cost: O(log n).
 void arraySet(Array *a, size_t i, int v){
-   /* /\* return; *\/ */
-   /*  Array *newNode; */
-    
-   /*  newNode = malloc(sizeof(Array)); */
-   /*  assert(newNode); */
-    
-   
-    
-    //Only run on root node, so we go down a depth of the size? what's the actual depth
-    /* for(int i = 0; i < a->size; i++) { */
-    /* for(;;){ */
-        if(a->index == i){
-            a->value = v;
-            return;
-        } else if(a->right->index > i) {
+
+void arraySet(Array *a, size_t i, int v){
+    if(a->index == i){a->value = v;
+        return;}
+        else if(a->right->index > i) {
             /* if (a->left) { */
                 a = a->left;
-                arraySet(a, i, v);
-                a->aggregate = arrayCombine(a, i);
-        } else {
+                a
+              
+            }
+         else {
+            /* if(a->right) { */
                 a = a->right;
-                arraySet(a,i,v);
-                /* a->aggregate = arrayCombine(a,i); */
-        }
-        // printf("size: %zu",a->size);
+            /* } else 
+            }
+        /* } */
+        
+    }
+    printf("size: %zu",a->size);
    /* a->value = v;  */
    /* if(a->right->index == i){a->right->value = v;} */
    /* else if(a->left->index == i) {a->left->value = v;} */
     
-
 }
 
 // Return the result of aggmmjjregating the first k elements
@@ -147,8 +137,39 @@ void arraySet(Array *a, size_t i, int v){
 // If k is zero or greater than size, returns combination of all elements.
 // Cost: O(log n).
 int arrayCombine(const Array *a, size_t k) {
-    if (a->size == 1){return a->value;}
-    else {return a->combine(a->aggregate, arrayCombine(a->left, k));}            
-                      
+    return arrayGet(a,k);
+    
+    
+    
+    
+    
+    
+    
+    
+    return 23;
+    /* int agg = arrayGet(a,0); */
+    /* if (a->size < k || k == 0) {k = a->size;}; */
+    /* int n = k/DIV; */
+    /* int p = k%DIV; */
+    
+    /* int t = a->itemsDIV[0]; */
+    /* for (int i = 1; i < n * p; i++) { */
+    /*     t = a->combine(t, a->itemsDIV[i]); */
+    /* } */
+    /* if (n==0) { */
+    /*     t = arrayGet(a,k); */
+    /*     p++; */
+    /* } */
+    /* /\* else {p++;} *\/ */
+    
+    /* int agg = a->combine(t, arrayGet(a, n*DIV + p)); */
+    /* /\* for (int i = 1; i < k; i++) { *\/ */
+    /*     /\* agg = (a->combine(agg, arrayGet(a,i))); *\/ */
+    /* /\* } *\/ */
+    /* for (int i = n*DIV+p+1; i < k; i++) { */
+    /*     agg = a->combine(agg, arrayGet(a, i)); */
+    /* } */
+    
+    /* return agg; */
     
 }
