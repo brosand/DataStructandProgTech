@@ -149,6 +149,7 @@ int leftCombine(const Array *a) {
         /* printf("136"); */
         return a->value;
     } else {
+        return (a->combine(a->aggregate, leftCombine(a->right)));
         assert(a->left);
         return (a->combine(leftCombine(a->left), leftCombine(a->right)));
     }
