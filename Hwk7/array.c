@@ -88,7 +88,7 @@ size_t arraySize(const Array *a) {
    
 // }
 int arrayGet(const Array *a, size_t i) {
-    if (a->index == i){return a->value;}
+    if (a->index == i && a->size == 1){return a->value;}
     /* printf("found index: %d, looking for: %zu\n", a->index, i); */
     assert(a);
     if (a->right->index > i){
@@ -109,46 +109,96 @@ int arrayGet(const Array *a, size_t i) {
 // Set the i-th element of an array to v.
 // No effect if i is out of range.
 // Cost: O(log n).
+int leftCombine(const Array *);
+void arrayFix(Array *, size_t i);
 void arraySet(Array *a, size_t i, int v){
-   /* /\* return; *\/ */
-   /*  Array *newNode; */
-    
-   /*  newNode = malloc(sizeof(Array)); */
-   /*  assert(newNode); */
-    
-   
-    
-    //Only run on root node, so we go down a depth of the size? what's the actual depth
-    /* for(int i = 0; i < a->size; i++) { */
-    /* for(;;){ */
-        if(a->index == i){
+        if(a->index == i && a->size == 1){
+    /* if(a->index == i){ */
             a->value = v;
+            
+
+            /* printf("set index %zu to %d\n", i,v); */
             return;
         } else if(a->right->index > i) {
             /* if (a->left) { */
                 a = a->left;
                 arraySet(a, i, v);
-                a->aggregate = arrayCombine(a, i);
+                /* a->aggregate = leftCombine(a->left); */
+                /* printf("set arrayagg %d to %d\n", a->index, a->aggregate); */
         } else {
                 a = a->right;
                 arraySet(a,i,v);
                 /* a->aggregate = arrayCombine(a,i); */
+                /* a->aggregate = leftCombine(a->left); */
         }
-        // printf("size: %zu",a->size);
-   /* a->value = v;  */
-   /* if(a->right->index == i){a->right->value = v;} */
-   /* else if(a->left->index == i) {a->left->value = v;} */
+        arrayFix(a, i);
     
 
 }
-
+void arrayFix(Array *a, size_t i){
+    if (a->size == 1){
+        return;
+    } else if(a->right->index > i){
+        a->aggregate = leftCombine(a->left);
+        a = a->left;
+        arrayFix(a,i);
+    } else {
+        a = a->right;
+        arrayFix(a, i);
+    }
+}
+int leftCombine(const Array *a) {
+    if (a->size == 1){
+        /* printf("136"); */
+        return a->value;
+    } else {
+        return (a->combine(leftCombine(a->left), leftCombine(a->right)));
+    }
+    
+    
+    /* else { */
+    /*     if (a->right->index > k) { */
+    /*         return leftCombine(a->left,k); */
+    /*     } */
+        
+    /*     /\* printf("140"); *\/ */
+    /*     return a->combine(a->left->aggregate, leftCombine(a->right, k)); */
+    /* }             */
+}
+int
+arrayCombineIterative(const Array *self, size_t k, int (*combine)(int, int))
+{
+    int accumulator = arrayGet(self, 0);
+    for(int i = 1; i < k; i++) {
+        accumulator = combine(accumulator, arrayGet(self, i));
+    } 
+    return accumulator;
+}
 // Return the result of aggmmjjregating the first k elements
 // of an array in order using the combine function.
 // If k is zero or greater than size, returns combination of all elements.
 // Cost: O(log n).
 int arrayCombine(const Array *a, size_t k) {
-    if (a->size == 1){return a->value;}
-    else {return a->combine(a->aggregate, arrayCombine(a->left, k));}            
-                      
-    
+    assert(a);
+    //TODO maybe take out for testing purposes
+    if(k == 0 || k > a->size) {return arrayCombine(a, a->size);}
+    /* if (a->index == k){ */
+        /* assert(a->value); */
+        /* return a->value; */
+    /* } */
+    /* printf("looking: %zu, index: %d\n", k, a->index); */
+    if (a->size == 1){
+        /* assert(a->value); */
+        /* printf("136"); */
+        return a->value;
+    }
+    else {
+        assert(a->right);
+        if (a->right->index > k) {
+            return arrayCombine(a->left,k);
+        }
+        
+        /* printf("140"); */
+        return a->combine(a->aggregate, arrayCombine(a->right, k));
+    }            
 }
