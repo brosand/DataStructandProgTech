@@ -1,0 +1,448 @@
+Reading data from 'callgrind.out.6751'...
+--------------------------------------------------------------------------------
+Profile data file 'callgrind.out.6751' (creator: callgrind-3.11.0)
+--------------------------------------------------------------------------------
+I1 cache: 
+D1 cache: 
+LL cache: 
+Timerange: Basic block 0 - 821476
+Trigger: Program termination
+Profiled target:  ./testArray (PID 6751, part 1)
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Thresholds:       99
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+       Ir 
+--------------------------------------------------------------------------------
+4,680,147  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+       Ir  file:function
+--------------------------------------------------------------------------------
+8,954,456  array.c:arraySet'2 [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+4,779,024  array.c:leftCombine'2 [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+4,680,147  ???:0x0000000000000c30 [/lib/x86_64-linux-gnu/ld-2.23.so]
+4,589,921  ???:_start [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+4,589,905  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx [/lib/x86_64-linux-gnu/ld-2.23.so]
+4,588,966  /build/glibc-Cl5G7W/glibc-2.23/csu/../csu/libc-start.c:(below main) [/lib/x86_64-linux-gnu/libc-2.23.so]
+4,587,750  testArray.c:main [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+4,587,750  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c:main
+4,075,312  array.c:arrayCreateR'2 [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+2,507,492  array.c:arrayCombine'2 [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+2,200,350  array.c:arrayDestroy'2 [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+1,858,393  array.c:arrayCreate [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+1,858,393  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayCreate
+1,675,040  array.c:leftCombine [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+1,272,816  array.c:arraySet [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+1,272,816  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arraySet
+1,182,224  testArray.c:printAggregates [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+  639,949  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/printf.c:printf [/lib/x86_64-linux-gnu/libc-2.23.so]
+  618,928  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/vfprintf.c:vfprintf [/lib/x86_64-linux-gnu/libc-2.23.so]
+  526,328  array.c:arrayCombine [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+  526,328  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayCombine
+  513,572  array.c:arrayCreateR [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+  449,035  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc [/lib/x86_64-linux-gnu/libc-2.23.so]
+  447,102  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c:sum
+  447,102  testArray.c:sum [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+  299,072  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:_int_malloc [/lib/x86_64-linux-gnu/libc-2.23.so]
+  246,847  array.c:arrayDestroy [/mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray]
+  246,847  /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayDestroy
+  200,000  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:free [/lib/x86_64-linux-gnu/libc-2.23.so]
+  177,303  /build/glibc-Cl5G7W/glibc-2.23/libio/fileops.c:_IO_file_xsputn@@GLIBC_2.2.5 [/lib/x86_64-linux-gnu/libc-2.23.so]
+  148,000  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:_int_free [/lib/x86_64-linux-gnu/libc-2.23.so]
+   88,597  /build/glibc-Cl5G7W/glibc-2.23/elf/rtld.c:_dl_start [/lib/x86_64-linux-gnu/ld-2.23.so]
+   87,949  /build/glibc-Cl5G7W/glibc-2.23/elf/../elf/dl-sysdep.c:_dl_sysdep_start [/lib/x86_64-linux-gnu/ld-2.23.so]
+   87,391  /build/glibc-Cl5G7W/glibc-2.23/elf/rtld.c:dl_main [/lib/x86_64-linux-gnu/ld-2.23.so]
+   79,520  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 [/lib/x86_64-linux-gnu/ld-2.23.so]
+   74,270  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/_itoa.c:_itoa_word [/lib/x86_64-linux-gnu/libc-2.23.so]
+   70,327  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-reloc.c:_dl_relocate_object [/lib/x86_64-linux-gnu/ld-2.23.so]
+   61,378  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-machine.h:_dl_relocate_object
+   58,943  /build/glibc-Cl5G7W/glibc-2.23/malloc/hooks.c:malloc_hook_ini [/lib/x86_64-linux-gnu/libc-2.23.so]
+   58,930  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc_hook_ini
+   57,854  /build/glibc-Cl5G7W/glibc-2.23/malloc/arena.c:ptmalloc_init.part.5 [/lib/x86_64-linux-gnu/libc-2.23.so]
+   57,669  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-addr.c:_dl_addr [/lib/x86_64-linux-gnu/libc-2.23.so]
+   51,707  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-lookup.c:_dl_lookup_symbol_x [/lib/x86_64-linux-gnu/ld-2.23.so]
+   50,050  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/printf-parse.h:vfprintf
+   40,040  /build/glibc-Cl5G7W/glibc-2.23/string/../sysdeps/x86_64/strchr.S:strchrnul [/lib/x86_64-linux-gnu/libc-2.23.so]
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c
+--------------------------------------------------------------------------------
+  No information has been collected for /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c
+--------------------------------------------------------------------------------
+  No information has been collected for /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: testArray.c
+--------------------------------------------------------------------------------
+     Ir 
+
+-- line 2 ----------------------------------------
+      .  #include <stdlib.h>
+      .  #include <assert.h>
+      .  
+      .  #include "array.h"
+      .  
+      .  // some associative functions on ints
+      .  static int
+      .  sum(int x, int y)
+198,712  {
+149,034      return x+y;
+ 99,356  }
+      .  
+      .  static int
+      .  sum1(int x, int y)
+      .  {
+      .      return x+y+1;
+      .  }
+      .  
+      .  // unpack a function from n elements to n elements encoded as a non-negative int
+-- line 20 ----------------------------------------
+-- line 72 ----------------------------------------
+      .      for(size_t i = 0; i < n; i++) {
+      .          printf("%d ", arrayGet(a, i));
+      .      }
+      .      putchar('\n');
+      .  }
+      .  
+      .  static void
+      .  printAggregates(const Array *a)
+      4  {
+      4      size_t n = arraySize(a);
+      7  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arraySize (1x)
+  4,009      for(size_t i = 0; i <= n; i++) {
+ 10,014          printf("%d ", arrayCombine(a, i));
+638,606  => /build/glibc-Cl5G7W/glibc-2.23/stdio-common/printf.c:printf (1000x)
+526,328  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayCombine (1001x)
+  2,218  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+      .      }
+      7      putchar('\n');
+  1,024  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+      3  }
+      .  
+      .  static void
+      .  eatComment(void)
+      3  {
+      .      int c;
+      .  
+    252      while((c = getchar()) != EOF && c != '\n');
+  1,368  => /build/glibc-Cl5G7W/glibc-2.23/libio/getchar.c:getchar (36x)
+      3  }
+      .  
+      .  #define ArgError() (fprintf(stderr, "%s: %c: missing argument(s)\n", argv[0], command), arrayDestroy(a), exit(1))
+      .  
+      .  #define DEFAULT_N (1)
+      .  
+      .  #define RANDOM_INCREMENTS_PER_LOCATION (8)
+      .  
+      .  int
+      .  main(int argc, char **argv)
+      8  {
+      .      char command;
+      .      int arg1;
+      .      int arg2;
+      .  
+      .      // start with a default array
+      4      Array *a = arrayCreate(sum, DEFAULT_N);
+ 59,829  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayCreate (1x)
+      .  
+      .      // make rand output consistent between runs
+      7      srand(0);
+ 11,372  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+      .  
+     40      while((command = getchar()) != EOF) {
+    333  => /build/glibc-Cl5G7W/glibc-2.23/libio/getchar.c:getchar (6x)
+  1,257  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+     42          switch(command) {
+      .              case '+':
+     12                  if(scanf("%d", &arg1) != 1) { ArgError(); }
+  1,727  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+      3                  arrayDestroy(a);
+    974  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayDestroy (1x)
+      6                  a = arrayCreate(sum, arg1);
+1,798,564  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayCreate (1x)
+      1                  break;
+      .              case '1':
+      .                  if(scanf("%d", &arg1) != 1) { ArgError(); }
+      .                  arrayDestroy(a);
+      .                  a = arrayCreate(sum1, arg1);
+      .                  break;
+      .              case '*':
+      .                  if(scanf("%d", &arg1) != 1) { ArgError(); }
+      .                  arrayDestroy(a);
+-- line 129 ----------------------------------------
+-- line 142 ----------------------------------------
+      .                  break;
+      .              case 'c':
+      .                  if(scanf("%d", &arg1) != 1) { ArgError(); }
+      .                  printf("%d\n", arrayCombine(a, arg1));
+      .                  break;
+      .              case 'i':
+      .                  // fill array with sequential values
+      .                  {
+      4                      size_t n = arraySize(a);
+      7  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arraySize (1x)
+  4,005                      for(size_t i = 0; i < n; i++) {
+  7,000                          arraySet(a, i, i);
+1,272,816  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arraySet (1000x)
+      .                      }
+      .                  }
+      1                  break;
+      .              case 'p':
+      .                  printArray(a);
+      .                  break;
+      .              case 'P':
+      3                  printAggregates(a);
+1,182,224  => testArray.c:printAggregates (1x)
+      1                  break;
+      .              case 't':
+      .                  // stress test
+      .                  if(scanf("%d", &arg1) != 1) { ArgError(); }
+      .                  arrayDestroy(a);
+      .                  a = arrayCreate(sum, arg1);
+      .                  
+      .                  for(int i = 0; i < arg1; i++) {
+      .                      arraySet(a, i, 1);
+-- line 169 ----------------------------------------
+-- line 212 ----------------------------------------
+      .                  break;
+      .              case '\n':
+      .              case ' ':
+      .              case '\t':
+      .                  // ignore it
+      .                  break;
+      .              case '#':
+      .                  // comment
+      1                  eatComment();
+  1,626  => testArray.c:eatComment (1x)
+      1                  break;
+      .              default:
+      .                  fprintf(stderr, "%s: bad command %c\n", argv[0], command);
+      .                  break;
+      .          }
+      .      }
+      .  
+      3      arrayDestroy(a);
+245,873  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/array.c:arrayDestroy (1x)
+      .  
+      1      return 0;
+      5  }
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: array.c
+--------------------------------------------------------------------------------
+     Ir 
+
+-- line 16 ----------------------------------------
+      .      int value;
+      .      int (*combine)(int, int);
+      .      struct array *left;
+      .      struct array *right;
+      .      
+      .  };
+      .  Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k, size_t max);
+      .  
+     10  Array *arrayCreate(int (*combine)(int, int), size_t n){
+      .  
+     12      Array *a = malloc(sizeof(Array));
+ 59,781  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+    104  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (1x)
+      8      a->max = n;
+      6      a->size = n;
+     10      a->index = n/2;
+      6      a->combine = combine;
+      4      a->aggregate = 0;
+      2      int l = 0;
+      9      if (n%2 != 0){l = 1;}
+      .      
+      4      if(n == 1){
+      6          a->left = a->right = 0;
+      2          return a;
+      .      }
+      .      
+     12      a->left = arrayCreateR(combine, n/2, 0, n);
+256,786  => array.c:arrayCreateR (1x)
+     18      a->right = arrayCreateR(combine, n/2 + l, n/2, n);
+256,786  => array.c:arrayCreateR (1x)
+  5,006      for (int i = 0; i < n; i++){
+  7,000          arraySet(a, i, 0);}
+1,272,816  => array.c:arraySet (1000x)
+      1      return a;
+      .  
+      4  }
+      .  
+ 13,986  Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k, size_t max){
+  3,996      assert(n!=0);
+  7,992      Array *a = malloc(sizeof(Array));
+    390  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:malloc (2x)
+  1,998      int l = 0;
+  9,104      if (n%2 != 0){l = 1;}
+  5,994      a->size = n;
+  7,992      a->max = max;
+  7,992      a->index = k;
+  3,996      a->value = 0;
+  3,996      a->aggregate = 0;
+  5,994      a->combine = combine;
+      .      
+  3,996      if(n == 1){
+      .      /* printf("deep: %zu\n",k); */
+  6,000          a->left = a->right = 0;
+  2,000          return a;
+      .      }
+      .      /* printf("index: %zu, size: %zu \n containing\n",k,n); */
+ 12,974      a->left = arrayCreateR(combine, n/2, a->index, max);
+256,516  => array.c:arrayCreateR'2 (2x)
+ 20,958      a->right = arrayCreateR(combine, n/2 + l, a->index + n/2, max);
+256,516  => array.c:arrayCreateR'2 (2x)
+      .      //TODO what about odd?
+    998      return a;
+      .  
+      .      
+  3,996  }
+      .  
+      .  // Free all space used by an array.
+      .  // Cost: O(n).
+  8,000  void arrayDestroy(Array *a) {
+ 11,996      if(a->left!=0){arrayDestroy(a->left);}
+122,873  => array.c:arrayDestroy'2 (1x)
+ 11,996      if(a->right!=0){arrayDestroy(a->right);}
+122,873  => array.c:arrayDestroy'2 (1x)
+  8,004      free(a);
+    951  => /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h:_dl_runtime_resolve_avx'2 (1x)
+    100  => /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c:free (1x)
+  6,000  }
+      .  
+      .  // Return the number of elements of an array.
+      .  // Cost: O(1).
+      6  size_t arraySize(const Array *a) {
+      4      return a->size;
+      4  }
+      .  
+      .  // Return the i-th element of an array
+      .  // or 0 if i is out of range.
+      .  // Cost: O(log n).
+      .  int arrayGet(const Array *a, size_t i) {
+      .      if (a->max < i) {return 0;}
+      .      if (a->index == i && a->size == 1){return a->value;}
+      .      if(i < 0){return 0;}
+-- line 94 ----------------------------------------
+-- line 107 ----------------------------------------
+      .      }
+      .  
+      .  }
+      .      
+      .  // Set the i-th element of an array to v.
+      .  // No effect if i is out of range.
+      .  // Cost: O(log n).
+      .  int leftCombine(const Array *);
+131,712  void arraySet(Array *a, size_t i, int v){
+109,760      if (i < 0 || i >= a->max){return;}
+      .      
+      .      Array *tmp;
+125,752      if(a->index == i && a->size == 1){
+      .          /* if(a->index == i){ */
+  4,000          assert(a);
+  6,000          a->value = v;
+      .          
+      .          
+      .          /* printf("set index %zu to %d\n", i,v); */
+  2,000          return;
+      .      }
+      .      /* else if (!(a->right)) {return;} */
+      .          
+119,712      else if(a->right->index > i) {
+ 19,728          tmp = a;
+ 39,456          assert(a->left);
+ 29,592          a = a->left;
+ 59,184          arraySet(a, i, v);
+1,071,312  => array.c:arraySet'2 (1000x)
+ 78,912          tmp->aggregate = leftCombine(tmp->left);
+322,000  => array.c:leftCombine (1000x)
+      .                  /* printf("set arrayagg %d to %d\n", a->index, a->aggregate); */
+      .      } else {
+ 30,264          a = a->right;
+ 70,616          arraySet(a,i,v);
+1,071,312  => array.c:arraySet'2 (1000x)
+      .          /* a->aggregate = arrayCombine(a,i); */
+      .          /* a->aggregate = leftCombine(a->left); */
+      .      }
+      .      
+      .  
+ 43,904  }
+272,440  int leftCombine(const Array *a) {
+217,952      if (a->size == 1){
+      .          /* assert(a->value); */
+      .          /* printf("136"); */
+ 29,592          return a->value;
+      .      } else {
+535,488          return (a->combine(a->aggregate, leftCombine(a->right)));
+1,358,096  => array.c:leftCombine'2 (8840x)
+ 79,560  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c:sum (8840x)
+      .          assert(a->left);
+      .          return (a->combine(leftCombine(a->left), leftCombine(a->right)));
+      .      }
+217,952  }
+      .      
+      .  // Return the result of aggmmjjregating the first k elements
+      .  // of an array in order using the combine function.
+      .  // If k is zero or greater than size, returns combination of all elements.
+      .  // Cost: O(log n).
+ 65,928  int arrayCombine(const Array *a, size_t k) {
+ 54,940      if (k > a->max) {return arrayCombine(a, a->max);}
+ 21,976      assert(a);
+      .      //TODO maybe take out for testing purposes
+ 21,983      if(k == 0 ) {return arrayCombine(a, a->size);}
+    606  => array.c:arrayCombine'2 (1x)
+ 43,948      if (a->size == 1){ 
+  3,003          return a->value;
+      .      }
+      .      else {
+ 39,944          assert(a->right);
+ 79,888          if (a->right->index > (k-1)) {
+ 34,524              return arrayCombine(a->left,k);
+237,848  => array.c:arrayCombine'2 (500x)
+      .          }
+      .          /* printf("aggregate at index %d is %d\n", a->index, a->aggregate); */
+      .          /* printf("140"); */
+      .          else {
+ 70,756              return a->combine(a->aggregate, arrayCombine(a->right, k));
+  4,500  => /mnt/c/Users/brosa/OneDrive/Yale/Sopho/Semester_2/CS223/Hwk7/testArray.c:sum (500x)
+237,848  => array.c:arrayCombine'2 (500x)
+      .          }
+      .      }            
+ 43,952  }
+
+--------------------------------------------------------------------------------
+The following files chosen for auto-annotation could not be found:
+--------------------------------------------------------------------------------
+  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/printf.c
+  /build/glibc-Cl5G7W/glibc-2.23/malloc/malloc.c
+  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/printf-parse.h
+  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-trampoline.h
+  /build/glibc-Cl5G7W/glibc-2.23/malloc/hooks.c
+  /build/glibc-Cl5G7W/glibc-2.23/csu/../csu/libc-start.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/rtld.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-addr.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/../elf/dl-sysdep.c
+  /build/glibc-Cl5G7W/glibc-2.23/malloc/arena.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-lookup.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/dl-reloc.c
+  /build/glibc-Cl5G7W/glibc-2.23/string/../sysdeps/x86_64/strchr.S
+  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/vfprintf.c
+  /build/glibc-Cl5G7W/glibc-2.23/libio/fileops.c
+  /build/glibc-Cl5G7W/glibc-2.23/stdio-common/_itoa.c
+  /build/glibc-Cl5G7W/glibc-2.23/elf/../sysdeps/x86_64/dl-machine.h
+
+--------------------------------------------------------------------------------
+Ir 
+--------------------------------------------------------------------------------
+70  percentage of events annotated
+
