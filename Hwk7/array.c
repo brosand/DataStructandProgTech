@@ -60,14 +60,11 @@ Array *arrayCreateR(int (*combine)(int, int), size_t n, size_t k, size_t max){
     a->combine = combine;
     
     if(n == 1){
-    /* printf("deep: %zu\n",k); */
         a->left = a->right = 0;
         return a;
     }
-    /* printf("index: %zu, size: %zu \n containing\n",k,n); */
     a->left = arrayCreateR(combine, n/2, a->index, max);
     a->right = arrayCreateR(combine, n/2 + l, a->index + n/2, max);
-    //TODO what about odd?
     return a;
 
     
@@ -94,19 +91,17 @@ int arrayGet(const Array *a, size_t i) {
     if (a->max < i) {return 0;}
     if (a->index == i && a->size == 1){return a->value;}
     if(i < 0){return 0;}
-    else if (!a->right){return 0;}    /* printf("found index: %d, looking for: %zu\n", a->index, i); */
+    else if (!a->right){return 0;} 
     else if (a->right->index > i){
         if(a->left){
             return arrayGet(a->left, i);
         }
-        assert(0);
      }
-     /* else if (a->index < i){ */
 
-    else {/* assert(a->right); */
+    // else {
         return arrayGet(a->right, i);
         
-    }
+    // }
 
 }
     
@@ -116,44 +111,28 @@ int arrayGet(const Array *a, size_t i) {
 int leftCombine(const Array *);
 void arraySet(Array *a, size_t i, int v){
     if (i < 0 || i >= a->max){return;}
-    
-    Array *tmp;
     if(a->index == i && a->size == 1){
-        /* if(a->index == i){ */
-        assert(a);
         a->value = v;
-        
-        
-        /* printf("set index %zu to %d\n", i,v); */
         return;
     }
-    /* else if (!(a->right)) {return;} */
-        
     else if(a->right->index > i) {
+        Array *tmp;
         tmp = a;
-        assert(a->left);
         a = a->left;
         arraySet(a, i, v);
         tmp->aggregate = leftCombine(tmp->left);
-                /* printf("set arrayagg %d to %d\n", a->index, a->aggregate); */
     } else {
         a = a->right;
         arraySet(a,i,v);
-        /* a->aggregate = arrayCombine(a,i); */
-        /* a->aggregate = leftCombine(a->left); */
     }
     
 
 }
 int leftCombine(const Array *a) {
     if (a->size == 1){
-        /* assert(a->value); */
-        /* printf("136"); */
         return a->value;
     } else {
         return (a->combine(a->aggregate, leftCombine(a->right)));
-        assert(a->left);
-        return (a->combine(leftCombine(a->left), leftCombine(a->right)));
     }
 }
     
@@ -163,19 +142,14 @@ int leftCombine(const Array *a) {
 // Cost: O(log n).
 int arrayCombine(const Array *a, size_t k) {
     if (k > a->max) {return arrayCombine(a, a->max);}
-    assert(a);
-    //TODO maybe take out for testing purposes
     if(k == 0 ) {return arrayCombine(a, a->size);}
     if (a->size == 1){ 
         return a->value;
     }
     else {
-        assert(a->right);
         if (a->right->index > (k-1)) {
             return arrayCombine(a->left,k);
         }
-        /* printf("aggregate at index %d is %d\n", a->index, a->aggregate); */
-        /* printf("140"); */
         else {
             return a->combine(a->aggregate, arrayCombine(a->right, k));
         }

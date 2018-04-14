@@ -1,0 +1,95 @@
+#!/usr/bin/python
+
+import tester
+import sys
+import os
+import time
+import glob
+import random
+
+def isVowel(c):
+    return c in "aeiou"
+
+def isClose(x, y):
+    return abs(ord(x) - ord(y)) <= 5
+
+def isMatch(x,y):
+    return isClose(x,y) or (isVowel(x) and isVowel(y))
+
+def shrink(s, i, j):
+    """If legal, return result of moving s[j] to s[i].
+
+    If not legal, return None."""
+
+    if isMatch(s[i], s[j]) and (j == i+1 or j == i+3):
+        s2 = list(s)
+        s2[i] = s2[j]
+        del s2[j]
+
+        return s2
+
+    else:
+        return None
+
+
+def permittedShrink(old, new):
+    """Can I shrink string old to get new?"""
+    n = len(old)
+    for i in range(n-1):
+        s2 = shrink(old, i, i+1)
+        if(s2 == list(new)):
+            return True
+    for i in range(n-3):
+        s2 = shrink(old, i, i+3)
+        if(s2 == list(new)):
+            return True
+    # nope
+    return False
+
+class ShrinkMatch:
+    """Test for legal shrink sequence."""
+    name = 'S'
+    def __init__(self, origin):
+        self._origin = origin
+    def __call__(self, output):
+        lines = output.split('\n')
+        # last line is spurious
+        del lines[-1]
+        if len(lines)== 0 or lines[0] != self._origin:
+            return False
+        for i in range(len(lines)-1):
+            if not permittedShrink(lines[i], lines[i+1]):
+                return False
+        if len(lines[-1]) != 1:
+            return False
+        # if we got here, all is good
+        return True
+
+t = tester.Tester(dueDate = time.mktime(time.strptime('2018-04-19 23:00', '%Y-%m-%d %H:%M')))
+
+try:
+    t.copyDir('.')
+except:
+    t.testFail(100, "Could not copy files")
+    print(t.report())
+    sys.exit(0)
+
+# we demanded no arguments, but let's keep it simple and just build shrink
+if t.test(20, """make -B CC=gcc CFLAGS='-std=c99 -Wall -pedantic -g3' shrink""", timeLimit = 20) == 0:
+    # can't compile
+    t.testFail(80, 'Compile failed, skipping remaining tests')
+else:
+    # shrinkable words
+    for word in ['shrink', 'yaleuniversity', 'mynameisozymandiaskingofkingslookuponmyworksyemightyanddespair']:
+        t.test(10, './shrink {}'.format(word), ShrinkMatch(word))
+
+    # unshrinkable words
+    for word in ['elephant', 'aaaaazzzzzaaaaazzzzzaaaaazzzzz']:
+        t.test(10, './shrink {}'.format(word), tester.Match(''))
+
+    # valgrind tests
+    for input in ['shrink', 'elephant', 'aaaaazzzzzaaaaazzzzz']:
+        t.test(10, 'valgrind -q --leak-check=full --show-reachable=yes ./shrink {} > /dev/null || true'.format(input), 
+               tester.Match(''))
+
+print(t.report())
