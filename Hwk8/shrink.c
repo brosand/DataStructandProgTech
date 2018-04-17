@@ -12,53 +12,96 @@ int main(int argc, char **argv){
   char **sols;
   
   int len = strlen(str);
-  sols = calloc(len, sizeof(*str));
+  sols = calloc(len, sizeof(str));
   sols[0] = str;
-  solve(str, sols, 1);
+  solve(str, &sols, 1);
+  if(sols[len] == 0){return 0;}
+  for (int i = 0; i < len; i++){
+      if(sols[i] != 0){
+          printf("%s\n", sols[i]);
+      }
+  }
 }
 
-void solve(char *str, char **sols, int d){
-    int len = strlen(str);
-    char *strTmp = str;
+int solve(char *str, char ***sols, int d){
+    /* printf("String: %s, sols1: %s, d: %d\n", str, (*sols)[1], d); */
     
-    if (len == 1) {
-            sols[d-1] = str;
-    } else {
+    
+    int len = strlen(str);
+    char *strTmp;
+    /* strTmp = malloc(len * sizeof(char)); */
+    /* strTmp = strncpy(strTmp, str, len); */
+    if(str[1] == 0){
+        /* break; */
+                /* printf("setting d:%d to %s\n", d, strTmp); */
+       (*sols)[d] = str; 
+        return 1;
+         //TODO fix this is ugly
+    }
+    char *strTmp2 = malloc(sizeof(char) * len);
+    strncpy(strTmp2, str, len);
+    
+    
+    
         char c1;
         char c2;
-        /* char *str2; */
-        for (int i = 0; i < len; i++){
+        char c3;
+        char *str2;
+        for (int i = 0; i < (len - 1); i++){
             c1 = str[i];
-            if(c1 == 0) {break;}
             c2 = str[i+1];
+            c3 = str[i+3];
               
-            if (legal(c1, c2)){
+            if (legal(c1, c2) == 1){
+                printf("diff: %d\n", (c1-c2));
+                strTmp = malloc(sizeof(str));
+                strTmp = strncpy(strTmp, str, len);
                 /* str1 = malloc(sizeof(char) * (len - 1)); */
                 /* strTmp = move */
                     
                 //TODO can switch to one function cheaper
                 strTmp[i] = strTmp[i+1];
                 strTmp[i+1] = 0;
-                fixZero(strTmp, len);
+                fixZero(&strTmp, len);
+                /* str2 = strTmp; */
+                /* printf("strTmp now is %s\n",strTmp); */
+            /* } */
+            /* printf("str2") */
+            /* if (solve(strTmp, sols, d+1) == 1) { */
+                /* if (strTmp[1] != 0){ */
+                    /* str2 = strTmp; */
+                    
+                /* putchar('6'); */
+                /* printf("setting d:%d to %s\n", d, strTmp); */
+                (*sols)[d] = strTmp;
                 solve(strTmp, sols, d+1);
-                sols[d+1] = strTmp;
-            }
-            c2 = str[i+3];
-            if (legal(c1, c2)){
-                strTmp[i] = strTmp[i+3];
-                strTmp[i+3] = 0;
-                fixZero(strTmp, len);
-                solve(strTmp, sols, d+1);
-                sols[d+1] = strTmp;
+            }if (legal(c1,c3) == 1){
+                /* printf("HIHI"); */
+                printf("diff: %d\n", (c1-c3));
+                strTmp2 = malloc(sizeof(str));
+                strTmp2 = strncpy(strTmp2, str, len);
+            /* c2 = str[i+3]; */
+            /* if (legal(c1, c2)){ */
+                strTmp2[i] = strTmp2[i+3];
+                strTmp2[i+3] = 0;
+                fixZero(&strTmp2, len);
+                str2 = strTmp2;
+                if (solve(strTmp2, sols, d+1) == 1){
+                    
+                /* printf("setting d:%d to %s\n", d, str2); */
+                    (*sols)[d] = str2;
+                }
                 
             }
         }
-    }
+    
+    return 0;
 }
 
 int legal(char c1, char c2){
-    
-    if ((c1 - c2) <= 5 || (c2 - c1) <= 5) {
+    if (c1 == 0 || c2 == 0){return 0;}
+    if (abs(c1 - c2) <= 5 || abs(c2 - c1) <= 5) {
+        /* printf("dif %d\n", (c1-c2)); */
         return 1;
     }
     for (int i = 0; i < NUMVOWELS; i++){
@@ -74,13 +117,13 @@ int legal(char c1, char c2){
 }
 
 
-void fixZero(char *str, int len){
+void fixZero(char **str, int len){
     for (int i = 0; i < len; i++){
-        if (str[i] == 0){
+        if ((*str)[i] == 0){
             for (int k = i+1; k < len; k++){
-                str[k-1] = str[k];
+                (*str)[k-1] = (*str)[k];
             }
-            str[len-1] = 0;
+            (*str)[len-1] = 0;
            //TODO Check this 
         }
     }
