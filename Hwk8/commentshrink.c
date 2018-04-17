@@ -1,5 +1,4 @@
 #include "shrink.h"
-#include "openHash.h"
 #include <stdlib.h>
 #include <assert.h>
 #include <stdio.h>
@@ -7,101 +6,89 @@
 
 #define VOWELS "aeiou"
 #define NUMVOWELS (5)
-#define HASHSIZE (649)
 
 int main(int argc, char **argv){
-  /* char *str = strdup(argv[1]); */
+  char *str = argv[1];
   char **sols;
-  Table t = createTable(HASHSIZE);
-  int len = strlen(argv[1]);
-  char *str = malloc(sizeof(char) * (len+1));
-  strcpy(str, argv[1]);
-  sols = calloc(len, sizeof(char*));
+  
+  int len = strlen(str);
+  sols = calloc(len, sizeof(str));
   sols[0] = str;
-  solve(str, &sols, 1, &t);
-  if(sols[len-1] == 0){
-      for(int i = 0; i < len; i++){
-          if(sols[i]!= 0){free(sols[i]);}
-          /* free(sols[i]) */
-      }
-      free(sols);
-      tDelete(t);
-      return 0;}
+  solve(str, &sols, 1);
+  if(sols[len] == 0){return 0;}
   for (int i = 0; i < len; i++){
       if(sols[i] != 0){
           printf("%s\n", sols[i]);
       }
-          free(sols[i]);
   }
-  free(sols);
-  tDelete(t);
 }
 
-int solve(char *str, char ***sols, int d, Table *t){
+int solve(char *str, char ***sols, int d){
     /* printf("String: %s, sols1: %s, d: %d\n", str, (*sols)[1], d); */
-    if (tLookup(*t, str) != NULL){
-        /* printf("TEST"); */
-        /* free(str); */
-        return 0;}
     
-    else{
-        int len = strlen(str);
-        char *strExtra = malloc(sizeof(char) * (len+1));
-        strExtra = strcpy(strExtra, str);
-        genInsert(*t, strExtra);
-        /* char *str2 = str; */
-        /* genInsert(*t,str); */
-    /* int len = strlen(str); */
-        if(str[1] == 0){
-        return 1;
-    }
-        /* genInsert(*t,str); */
+    
+    int len = strlen(str);
     char *strTmp;
-    char *strTmp2;
-    /* char *strTable; */
-    /* char *strTable2; */
     /* strTmp = malloc(len * sizeof(char)); */
     /* strTmp = strncpy(strTmp, str, len); */
+    if(str[1] == 0){
+        /* break; */
+                /* printf("setting d:%d to %s\n", d, strTmp); */
+       (*sols)[d] = str; 
+        return 1;
+         //TODO fix this is ugly
+    }
+    char *strTmp2 = malloc(sizeof(char) * len);
+    strncpy(strTmp2, str, len);
     
-    /* char *strTmp2 = malloc(sizeof(char) * len); */
-    /* strncpy(strTmp2, str, len); */
     
-    char c1;
-    char c2;
-    char c3;
+    
+        char c1;
+        char c2;
+        char c3;
         for (int i = 0; i < (len - 1); i++){
             c1 = str[i];
             c2 = str[i+1];
-            
-            if (i < (len - 3)){c3 = str[i+3];}
+            c3 = str[i+3];
               
             if (legal(c1, c2) == 1){
-                strTmp = malloc(sizeof(char) * (len+1));
-                strTmp = strcpy(strTmp, str);
+                strTmp = malloc(sizeof(str));
+                strTmp = strncpy(strTmp, str, len);
+                /* str1 = malloc(sizeof(char) * (len - 1)); */
+                /* strTmp = move */
                     
                 //TODO can switch to one function cheaper
                 strTmp[i] = strTmp[i+1];
                 strTmp[i+1] = 0;
                 fixZero(&strTmp, len);
-                if((*sols)[d] != 0){free((*sols)[d]);} 
+                /* str2 = strTmp; */
+                /* printf("strTmp now is %s\n",strTmp); */
+            /* } */
+            /* printf("str2") */
+            /* if (solve(strTmp, sols, d+1) == 1) { */
+                /* if (strTmp[1] != 0){ */
+                    /* str2 = strTmp; */
+                    
+                /* putchar('6'); */
+                /* printf("setting d:%d to %s\n", d, strTmp); */
                 (*sols)[d] = strTmp;
                 if(
-                solve(strTmp, sols, d+1, t) == 1)
+                solve(strTmp, sols, d+1) == 1)
                     {return 1;}
-                /* else{free(strTmp);} */
-            }if ((i < (len - 3)) && (legal(c1,c3) == 1)){
-                strTmp2 = malloc(sizeof(char) * (len+1));
-                strTmp2 = strcpy(strTmp2, str);
+            }if (legal(c1,c3) == 1){
+                strTmp2 = malloc(sizeof(str));
+                strTmp2 = strncpy(strTmp2, str, len);
+            /* c2 = str[i+3]; */
+            /* if (legal(c1, c2)){ */
                 strTmp2[i] = strTmp2[i+3];
                 strTmp2[i+3] = 0;
                 fixZero(&strTmp2, len);
                     
-                if((*sols)[d] != 0){free((*sols)[d]);} 
+                /* printf("setting d:%d to %s\n", d, str2); */
                     (*sols)[d] = strTmp2;
                     if(
-                    solve(strTmp2, sols, d+1, t)==1)
+                    solve(strTmp2, sols, d+1)==1)
                         {return 1;}
-                    /* else{free(strTmp2);} */
                 
                 
             }
@@ -109,7 +96,7 @@ int solve(char *str, char ***sols, int d, Table *t){
     
     return 0;
 }
-}
+
 int legal(char c1, char c2){
     if (c1 == 0 || c2 == 0){return 0;}
     if (abs(c1 - c2) <= 5 || abs(c2 - c1) <= 5) {

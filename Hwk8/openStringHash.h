@@ -2,18 +2,18 @@
 #define __OPENHASH_H_
 
 
-typedef struct {
-    /* int x; */
-    /* int y; */
-    /* int z; */
-    /* char ant; */
-    char *str;
-} value;
+/* typedef struct { */
+/*     /\* int x; *\/ */
+/*     /\* int y; *\/ */
+/*     /\* int z; *\/ */
+/*     /\* char ant; *\/ */
+/*     char *str; */
+/* } value; */
 
 typedef struct {
     int size;
     int count;
-    value **items;
+    char **items;
 } table;
 
 typedef table *Table;
@@ -22,20 +22,16 @@ typedef table *Table;
                  
 table *createTable(int size);
 
-void genInsert(table *t, char *str);
+/* void genInsert(table *t, char *str); */
 
-void tInsert(table *t, value *val);
+void tInsert(table *t, char *str);
 
 void tDelete(table *t);
-
-void tOldDelete(table *t);
 
 value *tLookup(table *t, char *str);
 
 /* char antPrint(table *t, int x, int y, int z); */
 
 unsigned int hash(char *str, const int size);
-
-unsigned int crcNaive(unsigned int const message);
 
 #endif // __OPENHASH_H_

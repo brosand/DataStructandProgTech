@@ -28,14 +28,10 @@ void tInsert(table *t, value *val);
 
 void tDelete(table *t);
 
-void tOldDelete(table *t);
-
 value *tLookup(table *t, char *str);
 
 /* char antPrint(table *t, int x, int y, int z); */
 
 unsigned int hash(char *str, const int size);
-
-unsigned int crcNaive(unsigned int const message);
 
 #endif // __OPENHASH_H_
